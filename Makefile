@@ -2,6 +2,7 @@
 SHELL := bash
 
 DUTY = $(shell [ -n "${VIRTUAL_ENV}" ] || echo pdm run) duty
+PYTHON_VERSIONS = 3.9 3.10 3.11
 
 args = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 check_quality_args = files
@@ -41,7 +42,7 @@ setup:
 
 .PHONY: check
 check:
-	@pdm multirun duty check-quality check-types check-docs
+	@pdm multirun -i 3.9,3.10,3.11 duty check-quality check-types check-docs
 	@$(DUTY) check-dependencies
 
 .PHONY: $(BASIC_DUTIES)
@@ -50,4 +51,4 @@ $(BASIC_DUTIES):
 
 .PHONY: $(QUALITY_DUTIES)
 $(QUALITY_DUTIES):
-	@pdm multirun duty $@ $(call args,$@)
+	@pdm multirun -i 3.9,3.10,3.11 duty $@ $(call args,$@)
