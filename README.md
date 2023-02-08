@@ -20,3 +20,17 @@ With [`pipx`](https://github.com/pipxproject/pipx):
 python3.7 -m pip install --user pipx
 pipx install griffe-typingdoc
 ```
+
+To use the extension in a MkDocs project,
+use this configuration:
+
+```yaml
+# mkdocs.yml
+plugins:
+- mkdocstrings:
+    handlers:
+      python:
+        options:
+          extensions:
+          - griffe_typingdoc
+```
