@@ -40,9 +40,6 @@ Discussions = "https://github.com/pawamoy/griffe-typingdoc/discussions"
 Gitter = "https://gitter.im/griffe-typingdoc/community"
 Funding = "https://github.com/sponsors/pawamoy"
 
-[project.scripts]
- = "griffe_typingdoc.cli:main"
-
 [tool.pdm]
 version = {source = "scm"}
 
