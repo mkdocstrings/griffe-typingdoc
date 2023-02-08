@@ -4,6 +4,8 @@ Griffe TypingDoc package.
 Griffe extension for @tiangolo's `typing.doc` PEP.
 """
 
-from typing import List
+from __future__ import annotations
 
-__all__: List[str] = []  # noqa: WPS410 (the only __variable__ we use)
+from griffe_typingdoc.extension import TypingDocExtension as Extension
+
+__all__: list[str] = ["Extension"]  # noqa: WPS410
