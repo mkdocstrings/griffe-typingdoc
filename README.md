@@ -6,7 +6,7 @@
 [![gitpod](https://img.shields.io/badge/gitpod-workspace-blue.svg?style=flat)](https://gitpod.io/#https://github.com/pawamoy/griffe-typingdoc)
 [![gitter](https://badges.gitter.im/join%20chat.svg)](https://gitter.im/griffe-typingdoc/community)
 
-Griffe extension for @tiangolo's `typing.doc` PEP.
+Griffe extension for [PEP 727 – Documentation Metadata in Typing](https://peps.python.org/pep-0727/).
 
 ## Installation
 

@@ -2,72 +2,80 @@
 
 from __future__ import annotations
 
-import ast
-import sys
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Sequence
 
-from griffe import Extension, safe_get_annotation
+from griffe import Docstring, Extension, Function, ObjectNode
 from griffe.docstrings.dataclasses import DocstringParameter, DocstringSectionParameters
-
-from griffe_typingdoc.typing_doc import __typing_doc__
-
-# TODO: remove once support for Python 3.8 is dropped
-if sys.version_info < (3, 9):
-    from typing_extensions import Annotated
-else:
-    from typing import Annotated
+from griffe.expressions import Expr, ExprCall, ExprSubscript, ExprTuple
+from typing_extensions import get_type_hints
 
 if TYPE_CHECKING:
-    from griffe import Function, ObjectNode
+    import ast
+
+    from typing_extensions import Annotated, doc  # type: ignore[attr-defined]
 
 
-@__typing_doc__(description="Griffe extension parsing the `typing.doc` decorator.")
 class TypingDocExtension(Extension):
-    """Griffe extension parsing the `typing.doc` decorator."""
+    """Griffe extension that reads documentation from `typing.doc`."""
 
-    @__typing_doc__(description="Visit a function definition.")
     def on_function_instance(
         self,
         node: Annotated[
             ast.AST | ObjectNode,
-            __typing_doc__(description="The object/AST node describing the function or its definition."),
+            doc("The object/AST node describing the function or its definition."),
         ],
-        func: Annotated[Function, __typing_doc__(description="The Griffe function just instantiated.")],
+        func: Annotated[
+            Function,
+            doc("The Griffe function just instantiated."),
+        ],
     ) -> None:
-        """Visit a function definition.
+        """Post-process Griffe functions to add a parameters section."""
+        if isinstance(node, ObjectNode):
+            hints = get_type_hints(node.obj, include_extras=True)
+            params_doc: dict[str, dict[str, Any]] = {
+                name: {"description": param.__metadata__[0].documentation}
+                for name, param in hints.items()
+                if name != "return"
+            }
+        else:
+            params_doc = defaultdict(dict)
+            for parameter in func.parameters:
+                annotation = parameter.annotation
+                if isinstance(annotation, ExprSubscript) and annotation.left.canonical_path in {
+                    "typing.Annotated",
+                    "typing_extensions.Annotated",
+                }:
+                    metadata: Sequence[str | Expr]
+                    if isinstance(annotation.slice, ExprTuple):
+                        annotation, *metadata = annotation.slice.elements
+                    else:
+                        annotation = annotation.slice
+                        metadata = ()
+                    doc = None
+                    for data in metadata:
+                        if isinstance(data, ExprCall) and data.function.canonical_path in {
+                            "typing.doc",
+                            "typing_extensions.doc",
+                        }:
+                            doc = eval(data.arguments[0])
+                    params_doc[parameter.name]["annotation"] = annotation
+                    if doc:
+                        params_doc[parameter.name]["description"] = doc
 
-        This function takes a function definition node and visits its contents,
-        particularly its decorators, to build up the documentation metadata.
-        """
-        func_doc = {}
-        for decorator_node in node.decorator_list:
-            if isinstance(decorator_node, ast.Call) and decorator_node.func.id == "__typing_doc__":  # type: ignore[attr-defined]
-                func_doc.update({kw.arg: kw.value.value for kw in decorator_node.keywords})  # type: ignore[attr-defined]
-
-        params_doc: dict[str, dict[str, Any]] = defaultdict(dict)
-        for arg in node.args.args:
-            if isinstance(arg.annotation, ast.Subscript) and arg.annotation.value.id == "Annotated":  # type: ignore[attr-defined]
-                param_name = arg.arg
-                params_doc[param_name]["annotation"] = safe_get_annotation(
-                    arg.annotation.slice.elts[0],  # type: ignore[attr-defined]
-                    func.parent,
-                )
-                doc = arg.annotation.slice.elts[1]  # type: ignore[attr-defined]
-                if isinstance(doc, ast.Call) and doc.func.id == "__typing_doc__":  # type: ignore[attr-defined]
-                    params_doc[param_name].update({kw.arg: kw.value.value for kw in doc.keywords})  # type: ignore[attr-defined,misc]
-
-        if (func_doc or params_doc) and func.docstring:
+        if params_doc:
+            if not func.docstring:
+                func.docstring = Docstring("", parent=func)
             sections = func.docstring.parsed
-            if params_doc:
-                docstring_params = []
-                for param_name, param_doc in params_doc.items():
-                    docstring_params.append(
-                        DocstringParameter(
-                            name=param_name,
-                            description=param_doc["description"],
-                            annotation=param_doc["annotation"],
-                            value=func.parameters[param_name].default,  # type: ignore[arg-type]
-                        ),
+            param_section = DocstringSectionParameters(
+                [
+                    DocstringParameter(
+                        name=param_name,
+                        description=param_doc["description"],
+                        annotation=param_doc["annotation"],
+                        value=func.parameters[param_name].default,  # type: ignore[arg-type]
                     )
-                sections.append(DocstringSectionParameters(docstring_params))
+                    for param_name, param_doc in params_doc.items()
+                ],
+            )
+            sections.insert(1, param_section)
