@@ -28,7 +28,10 @@ classifiers = [
     "Topic :: Utilities",
     "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [
+    # TODO: remove once support for Python 3.8 is dropped
+    "typing-extensions>=4.7; python_version < '3.9'",
+]
 
 [project.urls]
 Homepage = "https://pawamoy.github.io/griffe-typingdoc"

@@ -3,14 +3,21 @@
 from __future__ import annotations
 
 import ast
+import sys
 from collections import defaultdict
-from typing import TYPE_CHECKING, Annotated, Any
+from typing import TYPE_CHECKING, Any
 
 from griffe.agents.extensions import VisitorExtension, When
 from griffe.agents.nodes import safe_get_annotation
 from griffe.docstrings.dataclasses import DocstringParameter, DocstringSectionParameters
 
 from griffe_typingdoc.typing_doc import __typing_doc__
+
+# TODO: remove once support for Python 3.8 is dropped
+if sys.version_info < (3, 9):
+    from typing_extensions import Annotated
+else:
+    from typing import Annotated
 
 if TYPE_CHECKING:
     from griffe.dataclasses import Function
