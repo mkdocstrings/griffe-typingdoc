@@ -4,7 +4,7 @@ build-backend = "pdm.backend"
 
 [project]
 name = "griffe-typingdoc"
-description = "Griffe extension for @tiangolo's `typing.doc` PEP."
+description = "Griffe extension for PEP 727 – Documentation Metadata in Typing."
 authors = [{name = "Timothée Mazzucotelli", email = "pawamoy@pm.me"}]
 license = {text = "ISC"}
 readme = "README.md"
@@ -33,13 +33,13 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://pawamoy.github.io/griffe-typingdoc"
-Documentation = "https://pawamoy.github.io/griffe-typingdoc"
-Changelog = "https://pawamoy.github.io/griffe-typingdoc/changelog"
-Repository = "https://github.com/pawamoy/griffe-typingdoc"
-Issues = "https://github.com/pawamoy/griffe-typingdoc/issues"
-Discussions = "https://github.com/pawamoy/griffe-typingdoc/discussions"
-Gitter = "https://gitter.im/griffe-typingdoc/community"
+Homepage = "https://mkdocstrings.github.io/griffe-typingdoc"
+Documentation = "https://mkdocstrings.github.io/griffe-typingdoc"
+Changelog = "https://mkdocstrings.github.io/griffe-typingdoc/changelog"
+Repository = "https://github.com/mkdocstrings/griffe-typingdoc"
+Issues = "https://github.com/mkdocstrings/griffe-typingdoc/issues"
+Discussions = "https://github.com/mkdocstrings/griffe-typingdoc/discussions"
+Gitter = "https://gitter.im/mkdocstrings/griffe-typingdoc"
 Funding = "https://github.com/sponsors/pawamoy"
 
 [tool.pdm]

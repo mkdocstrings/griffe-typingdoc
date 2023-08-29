@@ -1,6 +1,6 @@
 """Griffe TypingDoc package.
 
-Griffe extension for @tiangolo's `typing.doc` PEP.
+Griffe extension for PEP 727 – Documentation Metadata in Typing.
 """
 
 from __future__ import annotations
