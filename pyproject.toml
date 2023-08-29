@@ -29,8 +29,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    # TODO: remove once support for Python 3.8 is dropped
-    "typing-extensions>=4.7; python_version < '3.9'",
+    "typing-extensions>=4.7",
 ]
 
 [project.urls]
@@ -84,6 +83,7 @@ tests = [
     "pytest-cov>=3.0",
     "pytest-randomly>=3.10",
     "pytest-xdist>=2.4",
+    "typing-extensions @ git+https://github.com/tiangolo/typing_extensions@typing-doc",
 ]
 typing = [
     "mypy>=0.910",
