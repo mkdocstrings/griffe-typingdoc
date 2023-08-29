@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from ast import literal_eval
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Sequence
 
@@ -58,7 +59,7 @@ class TypingDocExtension(Extension):
                             "typing.doc",
                             "typing_extensions.doc",
                         }:
-                            doc = eval(data.arguments[0])
+                            doc = literal_eval(str(data.arguments[0]))
                     params_doc[parameter.name]["annotation"] = annotation
                     if doc:
                         params_doc[parameter.name]["description"] = doc
