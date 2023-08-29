@@ -49,4 +49,4 @@ $(BASIC_DUTIES):
 
 .PHONY: $(QUALITY_DUTIES)
 $(QUALITY_DUTIES):
-	@pdm multirun -i 3.9,3.10,3.11 duty $@ $(call args,$@)
+	@pdm multirun duty $@ $(call args,$@)
