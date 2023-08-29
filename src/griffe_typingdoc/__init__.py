@@ -7,4 +7,4 @@ from __future__ import annotations
 
 from griffe_typingdoc.extension import TypingDocExtension as Extension
 
-__all__: list[str] = ["Extension"]  # noqa: WPS410
+__all__: list[str] = ["Extension"]

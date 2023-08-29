@@ -4,14 +4,16 @@ from __future__ import annotations
 
 import ast
 from collections import defaultdict
-from typing import Annotated, Any
+from typing import TYPE_CHECKING, Annotated, Any
 
 from griffe.agents.extensions import VisitorExtension, When
 from griffe.agents.nodes import safe_get_annotation
-from griffe.dataclasses import Function
 from griffe.docstrings.dataclasses import DocstringParameter, DocstringSectionParameters
 
 from griffe_typingdoc.typing_doc import __typing_doc__
+
+if TYPE_CHECKING:
+    from griffe.dataclasses import Function
 
 
 @__typing_doc__(description="Griffe extension parsing the `typing.doc` decorator.")
@@ -39,9 +41,8 @@ class TypingDocExtension(VisitorExtension):
 
         func_doc = {}
         for decorator_node in node.decorator_list:
-            if isinstance(decorator_node, ast.Call):
-                if decorator_node.func.id == "__typing_doc__":  # type: ignore[attr-defined]
-                    func_doc.update({kw.arg: kw.value.value for kw in decorator_node.keywords})  # type: ignore[attr-defined]
+            if isinstance(decorator_node, ast.Call) and decorator_node.func.id == "__typing_doc__":  # type: ignore[attr-defined]
+                func_doc.update({kw.arg: kw.value.value for kw in decorator_node.keywords})  # type: ignore[attr-defined]
 
         params_doc: dict[str, dict[str, Any]] = defaultdict(dict)
         for arg in node.args.args:
@@ -57,18 +58,17 @@ class TypingDocExtension(VisitorExtension):
                         if doc.func.id == "__typing_doc__":  # type: ignore[attr-defined]
                             params_doc[param_name].update({kw.arg: kw.value.value for kw in doc.keywords})  # type: ignore[attr-defined,misc]
 
-        if func_doc or params_doc:
-            if function.docstring:
-                sections = function.docstring.parsed
-                if params_doc:
-                    docstring_params = []
-                    for param_name, param_doc in params_doc.items():  # noqa: WPS440
-                        docstring_params.append(
-                            DocstringParameter(
-                                name=param_name,
-                                description=param_doc["description"],
-                                annotation=param_doc["annotation"],
-                                value=function.parameters[param_name].default,
-                            ),
-                        )
-                    sections.append(DocstringSectionParameters(docstring_params))
+        if (func_doc or params_doc) and function.docstring:
+            sections = function.docstring.parsed
+            if params_doc:
+                docstring_params = []
+                for param_name, param_doc in params_doc.items():
+                    docstring_params.append(
+                        DocstringParameter(
+                            name=param_name,
+                            description=param_doc["description"],
+                            annotation=param_doc["annotation"],
+                            value=function.parameters[param_name].default,
+                        ),
+                    )
+                sections.append(DocstringSectionParameters(docstring_params))

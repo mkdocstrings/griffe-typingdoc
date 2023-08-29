@@ -1,8 +1,8 @@
 """Tests for the Griffe extension."""
 
 from griffe.agents.extensions import Extensions
-from griffe.loader import GriffeLoader
 from griffe.docstrings.dataclasses import DocstringSectionKind
+from griffe.loader import GriffeLoader
 
 from griffe_typingdoc.extension import TypingDocExtension
 
