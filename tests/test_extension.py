@@ -7,7 +7,7 @@ from griffe.loader import GriffeLoader
 from griffe_typingdoc.extension import TypingDocExtension
 
 
-def test_extension():
+def test_extension() -> None:
     """Load our own package using the extension, assert a parameters section is added to the parsed docstring."""
     loader = GriffeLoader(extensions=Extensions(TypingDocExtension()))
     typingdoc = loader.load_module("griffe_typingdoc")

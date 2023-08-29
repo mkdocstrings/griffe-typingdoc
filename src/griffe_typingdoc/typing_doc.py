@@ -12,10 +12,10 @@ _Type = TypeVar("_Type")
 
 def __typing_doc__(  # noqa: N807
     *,
-    description: str | None = None,
-    deprecated: bool = False,
-    discouraged: bool = False,
-    raises: Mapping[type[BaseException], str | None] | None = None,
-    extra: dict[Any, Any] | None = None,
+    description: str | None = None,  # noqa: ARG001
+    deprecated: bool = False,  # noqa: ARG001
+    discouraged: bool = False,  # noqa: ARG001
+    raises: Mapping[type[BaseException], str | None] | None = None,  # noqa: ARG001
+    extra: dict[Any, Any] | None = None,  # noqa: ARG001
 ) -> Callable[[_Type], _Type]:
     return lambda _: _
