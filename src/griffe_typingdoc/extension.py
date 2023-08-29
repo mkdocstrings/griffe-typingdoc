@@ -7,8 +7,7 @@ import sys
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any
 
-from griffe.agents.extensions import VisitorExtension, When
-from griffe.agents.nodes import safe_get_annotation
+from griffe import Extension, safe_get_annotation
 from griffe.docstrings.dataclasses import DocstringParameter, DocstringSectionParameters
 
 from griffe_typingdoc.typing_doc import __typing_doc__
@@ -20,32 +19,27 @@ else:
     from typing import Annotated
 
 if TYPE_CHECKING:
-    from griffe.dataclasses import Function
+    from griffe import Function, ObjectNode
 
 
 @__typing_doc__(description="Griffe extension parsing the `typing.doc` decorator.")
-class TypingDocExtension(VisitorExtension):
+class TypingDocExtension(Extension):
     """Griffe extension parsing the `typing.doc` decorator."""
 
-    when = When.after_all
-
     @__typing_doc__(description="Visit a function definition.")
-    def visit_functiondef(
+    def on_function_instance(
         self,
         node: Annotated[
-            ast.FunctionDef,
-            __typing_doc__(
-                description="The AST node describing the function definition.",
-            ),
+            ast.AST | ObjectNode,
+            __typing_doc__(description="The object/AST node describing the function or its definition."),
         ],
+        func: Annotated[Function, __typing_doc__(description="The Griffe function just instantiated.")],
     ) -> None:
         """Visit a function definition.
 
         This function takes a function definition node and visits its contents,
         particularly its decorators, to build up the documentation metadata.
         """
-        func: Function = self.visitor.current.members[node.name]  # type: ignore[assignment]
-
         func_doc = {}
         for decorator_node in node.decorator_list:
             if isinstance(decorator_node, ast.Call) and decorator_node.func.id == "__typing_doc__":  # type: ignore[attr-defined]
