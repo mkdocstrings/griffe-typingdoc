@@ -4,7 +4,14 @@ site_url: "https://pawamoy.github.io/griffe-typingdoc"
 repo_url: "https://github.com/pawamoy/griffe-typingdoc"
 repo_name: "pawamoy/griffe-typingdoc"
 site_dir: "site"
-watch: [README.md, CONTRIBUTING.md, CHANGELOG.md, src/griffe_typingdoc]
+watch: [mkdocs.yml, README.md, CONTRIBUTING.md, CHANGELOG.md, src/griffe_typingdoc]
+copyright: Copyright &copy; 2023 Timothée Mazzucotelli
+edit_uri: edit/main/docs/
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
 
 nav:
 - Home:
@@ -13,7 +20,8 @@ nav:
   - Credits: credits.md
   - License: license.md
 # defer to gen-files + literate-nav
-- Code Reference: reference/
+- API reference:
+  - Griffe TypingDoc: reference/
 - Development:
   - Contributing: contributing.md
   - Code of Conduct: code_of_conduct.md
@@ -22,15 +30,30 @@ nav:
 
 theme:
   name: material
+  custom_dir: docs/.overrides
   icon:
     logo: material/currency-sign
   features:
+  - announce.dismiss
+  - content.action.edit
+  - content.action.view
+  - content.code.annotate
+  - content.code.copy
+  - content.tooltips
+  - navigation.footer
+  - navigation.indexes
+  - navigation.sections
   - navigation.tabs
   - navigation.tabs.sticky
   - navigation.top
   - search.highlight
   - search.suggest
+  - toc.follow
   palette:
+  - media: "(prefers-color-scheme)"
+    toggle:
+      icon: material/brightness-auto
+      name: Switch to light mode
   - media: "(prefers-color-scheme: light)"
     scheme: default
     primary: teal
@@ -44,23 +67,31 @@ theme:
     accent: lime
     toggle:
       icon: material/weather-night
-      name: Switch to light mode
+      name: Switch to system preference
 
 extra_css:
 - css/material.css
 - css/mkdocstrings.css
 
 markdown_extensions:
+- attr_list
 - admonition
 - callouts
-- pymdownx.emoji
+- footnotes
+- pymdownx.emoji:
+    emoji_index: !!python/name:materialx.emoji.twemoji
+    emoji_generator: !!python/name:materialx.emoji.to_svg
 - pymdownx.magiclink
 - pymdownx.snippets:
     check_paths: true
 - pymdownx.superfences
 - pymdownx.tabbed:
     alternate_style: true
-- pymdownx.tasklist
+    slugify: !!python/object/apply:pymdownx.slugs.slugify
+      kwds:
+        case: lower
+- pymdownx.tasklist:
+    custom_checkbox: true
 - toc:
     permalink: "¤"
 
@@ -73,7 +104,6 @@ plugins:
 - literate-nav:
     nav_file: SUMMARY.txt
 - coverage
-- section-index
 - mkdocstrings:
     handlers:
       python:
@@ -81,12 +111,27 @@ plugins:
         - https://docs.python.org/3/objects.inv
         - https://mkdocstrings.github.io/griffe/objects.inv
         options:
-          separate_signature: true
-          merge_init_into_class: true
           docstring_options:
             ignore_init_summary: true
+          docstring_section_style: list
           extensions:
           - griffe_typingdoc
+          heading_level: 1
+          merge_init_into_class: true
+          separate_signature: true
+          show_root_heading: true
+          show_root_full_path: false
+          show_signature_annotations: true
+          show_symbol_type_heading: true
+          show_symbol_type_toc: true
+          signature_crossrefs: true
+          summary: true
+- git-committers:
+    enabled: !ENV [DEPLOY, false]
+    repository: pawamoy/griffe-typingdoc
+
+- minify:
+    minify_html: !ENV [DEPLOY, false]
 
 extra:
   social:
@@ -96,3 +141,7 @@ extra:
     link: https://fosstodon.org/@pawamoy
   - icon: fontawesome/brands/twitter
     link: https://twitter.com/pawamoy
+  - icon: fontawesome/brands/gitter
+    link: https://gitter.im/griffe-typingdoc/community
+  - icon: fontawesome/brands/python
+    link: https://pypi.org/project/griffe-typingdoc/

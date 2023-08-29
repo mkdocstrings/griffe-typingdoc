@@ -1,5 +1,4 @@
-"""
-Griffe TypingDoc package.
+"""Griffe TypingDoc package.
 
 Griffe extension for @tiangolo's `typing.doc` PEP.
 """

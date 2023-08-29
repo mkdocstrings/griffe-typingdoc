@@ -1,5 +1,5 @@
 # Changes here will be overwritten by Copier
-_commit: 0.10.14
+_commit: 0.16.6
 _src_path: gh:pawamoy/copier-pdm
 author_email: pawamoy@pm.me
 author_fullname: Timothée Mazzucotelli
@@ -8,6 +8,7 @@ copyright_date: '2023'
 copyright_holder: Timothée Mazzucotelli
 copyright_holder_email: pawamoy@pm.me
 copyright_license: ISC License
+insiders: false
 project_description: Griffe extension for @tiangolo's `typing.doc` PEP.
 project_name: Griffe TypingDoc
 python_package_command_line_name: ''
@@ -16,5 +17,4 @@ python_package_import_name: griffe_typingdoc
 repository_name: griffe-typingdoc
 repository_namespace: pawamoy
 repository_provider: github.com
-use_precommit: false
 

@@ -1,24 +1,22 @@
 .DEFAULT_GOAL := help
 SHELL := bash
-
-DUTY = $(shell [ -n "${VIRTUAL_ENV}" ] || echo pdm run) duty
-PYTHON_VERSIONS = 3.9 3.10 3.11
+DUTY := $(if $(VIRTUAL_ENV),,pdm run) duty
+export PDM_MULTIRUN_VERSIONS ?= 3.8 3.9 3.10 3.11 3.12
 
 args = $(foreach a,$($(subst -,_,$1)_args),$(if $(value $a),$a="$($a)"))
 check_quality_args = files
-docs_serve_args = host port
+docs_args = host port
 release_args = version
 test_args = match
 
 BASIC_DUTIES = \
 	changelog \
+	check-api \
 	check-dependencies \
 	clean \
 	coverage \
 	docs \
 	docs-deploy \
-	docs-regen \
-	docs-serve \
 	format \
 	release
 
@@ -34,7 +32,7 @@ help:
 
 .PHONY: lock
 lock:
-	@pdm lock
+	@pdm lock -G:all
 
 .PHONY: setup
 setup:
@@ -42,8 +40,8 @@ setup:
 
 .PHONY: check
 check:
-	@pdm multirun -i 3.9,3.10,3.11 duty check-quality check-types check-docs
-	@$(DUTY) check-dependencies
+	@pdm multirun duty check-quality check-types check-docs
+	@$(DUTY) check-dependencies check-api
 
 .PHONY: $(BASIC_DUTIES)
 $(BASIC_DUTIES):
