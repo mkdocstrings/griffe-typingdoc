@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 from ast import literal_eval
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Sequence
@@ -14,21 +15,26 @@ from typing_extensions import get_type_hints
 if TYPE_CHECKING:
     import ast
 
-    from typing_extensions import Annotated, doc  # type: ignore[attr-defined]
+    from typing_extensions import Annotated, Doc  # type: ignore[attr-defined]
 
 
 class TypingDocExtension(Extension):
-    """Griffe extension that reads documentation from `typing.doc`."""
+    """Griffe extension that reads documentation from `typing.Doc`."""
 
     def on_function_instance(
         self,
         node: Annotated[
             ast.AST | ObjectNode,
-            doc("The object/AST node describing the function or its definition."),
+            Doc("The object/AST node describing the function or its definition."),
         ],
         func: Annotated[
             Function,
-            doc("The Griffe function just instantiated."),
+            Doc(
+                # Multiline docstring to test de-indentation.
+                """
+                The Griffe function just instantiated.
+                """
+            ),
         ],
     ) -> None:
         """Post-process Griffe functions to add a parameters section."""
@@ -56,10 +62,10 @@ class TypingDocExtension(Extension):
                     doc = None
                     for data in metadata:
                         if isinstance(data, ExprCall) and data.function.canonical_path in {
-                            "typing.doc",
-                            "typing_extensions.doc",
+                            "typing.Doc",
+                            "typing_extensions.Doc",
                         }:
-                            doc = literal_eval(str(data.arguments[0]))
+                            doc = inspect.cleandoc(literal_eval(str(data.arguments[0])))
                     params_doc[parameter.name]["annotation"] = annotation
                     if doc:
                         params_doc[parameter.name]["description"] = doc
@@ -72,7 +78,7 @@ class TypingDocExtension(Extension):
                 [
                     DocstringParameter(
                         name=param_name,
-                        description=param_doc["description"],
+                        description=param_doc.get("description") or "",
                         annotation=param_doc["annotation"],
                         value=func.parameters[param_name].default,  # type: ignore[arg-type]
                     )
