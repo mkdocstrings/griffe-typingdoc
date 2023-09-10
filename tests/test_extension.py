@@ -14,3 +14,4 @@ def test_extension() -> None:
     sections = typingdoc["extension.TypingDocExtension.on_function_instance"].docstring.parsed
     assert len(sections) == 2
     assert sections[1].kind is DocstringSectionKind.parameters
+    assert sections[1].value[1].description == "The Griffe function just instantiated."
