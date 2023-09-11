@@ -33,7 +33,7 @@ class TypingDocExtension(Extension):
                 # Multiline docstring to test de-indentation.
                 """
                 The Griffe function just instantiated.
-                """
+                """,
             ),
         ],
     ) -> None:
