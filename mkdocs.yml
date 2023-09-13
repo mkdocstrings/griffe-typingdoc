@@ -19,6 +19,7 @@ nav:
   - Changelog: changelog.md
   - Credits: credits.md
   - License: license.md
+- Examples: examples.md
 # defer to gen-files + literate-nav
 - API reference:
   - Griffe TypingDoc: reference/
@@ -78,6 +79,7 @@ markdown_extensions:
 - admonition
 - callouts
 - footnotes
+- pymdownx.blocks.details
 - pymdownx.emoji:
     emoji_index: !!python/name:materialx.emoji.twemoji
     emoji_generator: !!python/name:materialx.emoji.to_svg
@@ -110,6 +112,7 @@ plugins:
         import:
         - https://docs.python.org/3/objects.inv
         - https://mkdocstrings.github.io/griffe/objects.inv
+        paths: [src, docs/examples]
         options:
           docstring_options:
             ignore_init_summary: true
