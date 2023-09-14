@@ -2,13 +2,12 @@
 
 ## Simple
 
-
 /// details | `simple` Python module
+    type: example
 
 ```python
 --8<-- "docs/examples/simple.py"
 ```
-
 ///
 
 ::: simple
@@ -18,11 +17,11 @@
 ## Enhanced
 
 /// details | `enhanced` Python module
+    type: example
 
 ```python
 --8<-- "docs/examples/enhanced.py"
 ```
-
 ///
 
 ::: enhanced

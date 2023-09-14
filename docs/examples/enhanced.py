@@ -18,10 +18,6 @@ from __future__ import annotations
 from typing import (
     Annotated,
     Generator,
-    Iterator,
-    NotRequired,
-    TypedDict,
-    Unpack,
     Deprecated,
     Doc,
     Name,
@@ -51,11 +47,6 @@ def deprecated1() -> Annotated[None, Deprecated("Deprecated since v2.")]:
 # For parameters:
 def deprecated2(param1: Annotated[int, Deprecated("Deprecated since v2."), Doc("Description of param1.")] = 0):
     """Showing off deprecated parameters."""
-
-
-# Documenting parameters, replacing Parameters sections:
-def parameters(param1: Annotated[str, Doc("Description of param1.")] = "default"):
-    """Showing off parameters."""
 
 
 # Documenting exceptions, replacing Raises sections,

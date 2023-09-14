@@ -22,6 +22,11 @@ ATTRIBUTE: Annotated[
 ]
 
 
+# Documenting parameters, replacing Parameters sections:
+def parameters(param1: Annotated[str, Doc("Description of param1.")] = "default"):
+    """Showing off parameters."""
+
+
 # Documenting other parameters (keyword arguments), replacing Other Parameters sections:
 class OtherParameters(TypedDict, total=False):
     """Keyword arguments of [`simple.other_parameters`][]."""

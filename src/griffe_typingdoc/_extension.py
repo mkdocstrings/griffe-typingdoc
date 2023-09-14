@@ -67,16 +67,19 @@ class TypingDocExtension(Extension):
         """Post-process Griffe functions to add a parameters section."""
         module = _dynamic if isinstance(node, ObjectNode) else _static
 
-        deprecated_section = module._deprecated_docs(node, func)
-        params_section = module._parameters_docs(node, func)
-        other_params_section = module._other_parameters_docs(node, func)
         yields_section, receives_section, returns_section = module._yrr_docs(node, func)
-        warns_section = module._warns_docs(node, func)
-        raises_section = module._raises_docs(node, func)
+        new_sections = (
+            deprecated_section := module._deprecated_docs(node, func),
+            params_section := module._parameters_docs(node, func),
+            other_params_section := module._other_parameters_docs(node, func),
+            warns_section := module._warns_docs(node, func),
+            raises_section := module._raises_docs(node, func),
+            yields_section,
+            receives_section,
+            returns_section,
+        )
 
-        if not (
-            params_section or other_params_section or yields_section or receives_section or returns_section
-        ):
+        if not any(new_sections):
             return
 
         if not func.docstring:
