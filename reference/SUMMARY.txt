@@ -1,2 +1,1 @@
 * [<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> griffe_typingdoc](griffe_typingdoc/index.md)
-    * [<code class="doc-symbol doc-symbol-nav doc-symbol-module"></code> extension](griffe_typingdoc/extension.md)
