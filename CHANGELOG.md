@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.2.0](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.2.0) - 2023-09-14
+
+<small>[Compare with 0.1.0](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.1.0...0.2.0)</small>
+
+### Dependencies
+
+- Depend on Griffe ([cc15edc](https://github.com/mkdocstrings/griffe-typingdoc/commit/cc15edc3b170e891fa37ff69b58eb9fea7af8fa8) by Timothée Mazzucotelli).
+
+### Features
+
+- Support more experimental annotations (names, deprecations, warnings, exceptions) ([afa6dd9](https://github.com/mkdocstrings/griffe-typingdoc/commit/afa6dd96fe7dc90d16934b1b191484f891f56d92) by Timothée Mazzucotelli). [Issue #1](https://github.com/mkdocstrings/griffe-typingdoc/issues/1), [PR #3](https://github.com/mkdocstrings/griffe-typingdoc/pull/3)
+
+### Code Refactoring
+
+- Refactor implementation with latest version in `typing_extensions`, `Doc()`, and de-indent ([c7a61c6](https://github.com/mkdocstrings/griffe-typingdoc/commit/c7a61c68a39d6dbb4955037cd18f96be214f2d0d) by Sebastián Ramírez). [PR #2](https://github.com/mkdocstrings/griffe-typingdoc/pull/2)
+
 ## [0.1.0](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.1.0) - 2023-08-29
 
 <small>[Compare with first commit](https://github.com/mkdocstrings/griffe-typingdoc/compare/10139be2140f73617681a1f7ca2c4514ea9017e5...0.1.0)</small>
