@@ -84,7 +84,7 @@ tests = [
     "pytest-cov>=3.0",
     "pytest-randomly>=3.10",
     "pytest-xdist>=2.4",
-    "typing-extensions @ git+https://github.com/tiangolo/typing_extensions@typing-doc",
+    "typing-extensions>=4.8.0rc1",
 ]
 typing = [
     "mypy>=0.910",
