@@ -4,7 +4,7 @@
 
 # The goal is to replace the following sections:
 
-# Deprecated
+# deprecated
 # Parameters
 # Other Parameters
 # Raises
@@ -18,7 +18,7 @@ from __future__ import annotations
 from typing import (
     Annotated,
     Generator,
-    Deprecated,
+    deprecated,
     Doc,
     Name,
     Raises,
@@ -29,7 +29,7 @@ from typing import (
 # Documenting deprecations, replacing Deprecated sections:
 DEPRECATED: Annotated[
     int,
-    Deprecated(
+    deprecated(
         """Deprecated since v2.
 
         Please stop using this deprecated attribute, thanks!
@@ -40,12 +40,12 @@ DEPRECATED: Annotated[
 
 
 # For functions, maybe add the information to the return value annotation:
-def deprecated1() -> Annotated[None, Deprecated("Deprecated since v2.")]:
+def deprecated1() -> Annotated[None, deprecated("Deprecated since v2.")]:
     """Showing off deprecated functions."""
 
 
 # For parameters:
-def deprecated2(param1: Annotated[int, Deprecated("Deprecated since v2."), Doc("Description of param1.")] = 0):
+def deprecated2(param1: Annotated[int, deprecated("Deprecated since v2."), Doc("Description of param1.")] = 0):
     """Showing off deprecated parameters."""
 
 
