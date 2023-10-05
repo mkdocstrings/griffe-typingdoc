@@ -65,8 +65,8 @@ def _set_metadata_warns(metadata: dict[str, Any], data: ExprCall) -> None:
 _set_metadata_map = {
     "typing.Doc": _set_metadata_doc,
     "typing_extensions.Doc": _set_metadata_doc,
-    "typing.Deprecated": _set_metadata_deprecated,
-    "typing_extensions.Deprecated": _set_metadata_deprecated,
+    "typing.deprecated": _set_metadata_deprecated,
+    "typing_extensions.deprecated": _set_metadata_deprecated,
     "typing.Name": _set_metadata_name,
     "typing_extensions.Name": _set_metadata_name,
     "typing.Raises": _set_metadata_raises,
@@ -77,7 +77,8 @@ _set_metadata_map = {
 
 
 def _set_metadata(metadata: dict[str, Any], data: ExprCall) -> None:
-    _set_metadata_map[data.function.canonical_path](metadata, data)
+    if data.function.canonical_path in _set_metadata_map:
+        _set_metadata_map[data.function.canonical_path](metadata, data)
 
 
 def _metadata(annotation: str | Expr | None) -> dict[str, Any]:
