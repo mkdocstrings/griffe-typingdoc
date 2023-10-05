@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.2.1](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.2.1) - 2023-10-05
+
+<small>[Compare with 0.2.0](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.2.0...0.2.1)</small>
+
+### Bug Fixes
+
+- Fix casing of `deprecated`, only set metadata when annotated element is known ([98f3c2c](https://github.com/mkdocstrings/griffe-typingdoc/commit/98f3c2c296e946dee0fd30ae533515c1896022e1) by Sebastián Ramírez).
+
 ## [0.2.0](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.2.0) - 2023-09-14
 
 <small>[Compare with 0.1.0](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.1.0...0.2.0)</small>
