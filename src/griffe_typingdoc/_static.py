@@ -83,7 +83,7 @@ def _set_metadata(metadata: dict[str, Any], data: ExprCall) -> None:
 
 def _metadata(annotation: str | Expr | None) -> dict[str, Any]:
     metadata: dict[str, Any] = {"raises": [], "warns": []}
-    if isinstance(annotation, ExprSubscript) and annotation.left.canonical_path in {
+    if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
         "typing.Annotated",
         "typing_extensions.Annotated",
     }:

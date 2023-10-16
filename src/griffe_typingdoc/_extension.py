@@ -33,8 +33,18 @@ class TypingDocExtension(Extension):
         """Post-process Griffe attributes to create their docstring."""
         module = _dynamic if isinstance(node, ObjectNode) else _static
 
+        new_sections = (
+            docstring := module._attribute_docs(node, attr),
+            deprecated_section := module._deprecated_docs(node, attr),
+            raises_section := module._raises_docs(node, attr),
+            warns_section := module._warns_docs(node, attr),
+        )
+
+        if not any(new_sections):
+            return
+
         if not attr.docstring:
-            attr.docstring = Docstring(module._attribute_docs(node, attr), parent=attr)
+            attr.docstring = Docstring(docstring, parent=attr)
 
         sections = attr.docstring.parsed
 

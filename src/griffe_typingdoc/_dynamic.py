@@ -29,8 +29,8 @@ def _doc(name: str, hints: dict[str, Any]) -> str | None:
         return None
 
 
-def _attribute_docs(node: ObjectNode, attr: Attribute) -> str | None:
-    return _doc(attr.name, _hints(node))
+def _attribute_docs(node: ObjectNode, attr: Attribute) -> str:
+    return _doc(attr.name, _hints(node)) or ""
 
 
 def _parameters_docs(node: ObjectNode, func: Function) -> DocstringSectionParameters | None:
