@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
 
 def _no_self_params(func: Function) -> list[Parameter]:
-    if func.parent and func.parent.is_class and func.parameters[0].name in {"self", "cls"}:
+    if func.parent and func.parent.is_class and func.parameters and func.parameters[0].name in {"self", "cls"}:
         return list(func.parameters)[1:]
     return list(func.parameters)
 
