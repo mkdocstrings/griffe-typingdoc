@@ -11,33 +11,28 @@ from griffe_typingdoc import _dynamic, _static
 if TYPE_CHECKING:
     import ast
 
-    from griffe.dataclasses import Attribute
-    from typing_extensions import Annotated, Doc  # type: ignore[attr-defined]
+    from griffe.dataclasses import Attribute, Module, Object
+    from typing_extensions import Annotated, Doc
 
 
 class TypingDocExtension(Extension):
     """Griffe extension that reads documentation from `typing.Doc`."""
 
-    def on_attribute_instance(
-        self,
-        *,
-        node: Annotated[
-            ast.AST | ObjectNode,
-            Doc("The object/AST node describing the attribute or its definition."),
-        ],
-        attr: Annotated[
-            Attribute,
-            Doc("The Griffe attribute just instantiated."),
-        ],
-    ) -> None:
-        """Post-process Griffe attributes to create their docstring."""
-        module = _dynamic if isinstance(node, ObjectNode) else _static
+    def __init__(self) -> None:
+        self._handled: set[str] = set()
+
+    def _handle_attribute(self, attr: Attribute, /, *, node: ObjectNode | None = None) -> None:
+        if attr.path in self._handled:
+            return
+        self._handled.add(attr.path)
+
+        module = _dynamic if node else _static
 
         new_sections = (
-            docstring := module._attribute_docs(node, attr),
-            deprecated_section := module._deprecated_docs(node, attr),
-            raises_section := module._raises_docs(node, attr),
-            warns_section := module._warns_docs(node, attr),
+            docstring := module._attribute_docs(attr, node=node),
+            deprecated_section := module._deprecated_docs(attr, node=node),
+            raises_section := module._raises_docs(attr, node=node),
+            warns_section := module._warns_docs(attr, node=node),
         )
 
         if not any(new_sections):
@@ -48,45 +43,31 @@ class TypingDocExtension(Extension):
 
         sections = attr.docstring.parsed
 
-        if deprecated_section := module._deprecated_docs(node, attr):
+        if deprecated_section:
             sections.insert(0, deprecated_section)
 
-        if raises_section := module._raises_docs(node, attr):
+        if raises_section:
             sections.append(raises_section)
 
-        if warns_section := module._warns_docs(node, attr):
+        if warns_section:
             sections.append(warns_section)
 
-    def on_function_instance(
-        self,
-        *,
-        node: Annotated[
-            ast.AST | ObjectNode,
-            Doc("The object/AST node describing the function or its definition."),
-        ],
-        func: Annotated[
-            Function,
-            Doc(
-                # Multiline docstring to test de-indentation.
-                """
-                The Griffe function just instantiated.
-                """,
-            ),
-        ],
-    ) -> None:
-        """Post-process Griffe functions to add a parameters section."""
-        module = _dynamic if isinstance(node, ObjectNode) else _static
+    def _handle_function(self, func: Function, /, *, node: ObjectNode | None = None) -> None:
+        if func.path in self._handled:
+            return
+        self._handled.add(func.path)
 
-        yields_section, receives_section, returns_section = module._yrr_docs(node, func)
+        module = _dynamic if node else _static
+
         new_sections = (
-            deprecated_section := module._deprecated_docs(node, func),
-            params_section := module._parameters_docs(node, func),
-            other_params_section := module._other_parameters_docs(node, func),
-            warns_section := module._warns_docs(node, func),
-            raises_section := module._raises_docs(node, func),
-            yields_section,
-            receives_section,
-            returns_section,
+            deprecated_section := module._deprecated_docs(func, node=node),
+            params_section := module._parameters_docs(func, node=node),
+            other_params_section := module._other_parameters_docs(func, node=node),
+            warns_section := module._warns_docs(func, node=node),
+            raises_section := module._raises_docs(func, node=node),
+            yields_section := module._yields_docs(func, node=node),
+            receives_section := module._receives_docs(func, node=node),
+            returns_section := module._returns_docs(func, node=node),
         )
 
         if not any(new_sections):
@@ -120,3 +101,63 @@ class TypingDocExtension(Extension):
 
         if returns_section:
             sections.append(returns_section)
+
+    def _handle_object(self, obj: Object) -> None:
+        if obj.is_alias:
+            return
+        if obj.is_module or obj.is_class:
+            for member in obj.members.values():
+                self._handle_object(member)
+        elif obj.is_function:
+            self._handle_function(obj)
+        elif obj.is_attribute:
+            self._handle_attribute(obj)
+
+    def on_package_loaded(
+        self,
+        *,
+        pkg: Annotated[
+            Module,
+            Doc("The top-level module representing a package."),
+        ],
+    ) -> None:
+        """Post-process Griffe packages recursively (non-yet handled objects only)."""
+        self._handle_object(pkg)
+
+    def on_function_instance(
+        self,
+        *,
+        node: Annotated[
+            ast.AST | ObjectNode,
+            Doc("The object/AST node describing the function or its definition."),
+        ],
+        func: Annotated[
+            Function,
+            Doc("""The Griffe function just instantiated."""),
+        ],
+    ) -> None:
+        """Post-process Griffe functions to add a parameters section.
+
+        It applies only for dynamic analysis.
+        """
+        if isinstance(node, ObjectNode):
+            self._handle_function(func, node=node)
+
+    def on_attribute_instance(
+        self,
+        *,
+        node: Annotated[
+            ast.AST | ObjectNode,
+            Doc("The object/AST node describing the attribute or its definition."),
+        ],
+        attr: Annotated[
+            Attribute,
+            Doc("The Griffe attribute just instantiated."),
+        ],
+    ) -> None:
+        """Post-process Griffe attributes to create their docstring.
+
+        It applies only for dynamic analysis.
+        """
+        if isinstance(node, ObjectNode):
+            self._handle_attribute(attr, node=node)

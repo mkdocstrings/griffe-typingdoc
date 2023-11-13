@@ -39,7 +39,7 @@ def _to_parameters_section(params_dict: dict[str, dict[str, Any]], func: Functio
                 name=param_name,
                 description=param_doc["description"],
                 annotation=param_doc["annotation"],
-                value=func.parameters[param_name].default,  # type: ignore[arg-type]
+                value=func.parameters[param_name].default,
             )
             for param_name, param_doc in params_dict.items()
         ],
