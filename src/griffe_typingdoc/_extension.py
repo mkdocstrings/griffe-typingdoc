@@ -107,11 +107,11 @@ class TypingDocExtension(Extension):
             return
         if obj.is_module or obj.is_class:
             for member in obj.members.values():
-                self._handle_object(member)
+                self._handle_object(member)  # type: ignore[arg-type]
         elif obj.is_function:
-            self._handle_function(obj)
+            self._handle_function(obj)  # type: ignore[arg-type]
         elif obj.is_attribute:
-            self._handle_attribute(obj)
+            self._handle_attribute(obj)  # type: ignore[arg-type]
 
     def on_package_loaded(
         self,

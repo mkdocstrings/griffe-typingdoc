@@ -104,7 +104,7 @@ def _attribute_docs(attr: Attribute, **kwargs: Any) -> str:  # noqa: ARG001
 def _parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionParameters | None:  # noqa: ARG001
     params_doc: dict[str, dict[str, Any]] = defaultdict(dict)
     for parameter in _no_self_params(func):
-        stars = {ParameterKind.var_positional: "*", ParameterKind.var_keyword: "**"}.get(parameter.kind, "")
+        stars = {ParameterKind.var_positional: "*", ParameterKind.var_keyword: "**"}.get(parameter.kind, "")  # type: ignore[arg-type]
         param_name = f"{stars}{parameter.name}"
         metadata = _metadata(parameter.annotation)
         description = f'{metadata.get("deprecated", "")} {metadata.get("doc", "")}'.lstrip()
@@ -123,12 +123,12 @@ def _other_parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionPar
                 "typing.Annotated",
                 "typing_extensions.Annotated",
             }:
-                annotation = annotation.slice.elements[0]
+                annotation = annotation.slice.elements[0]  # type: ignore[attr-defined]
             if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
                 "typing.Unpack",
                 "typing_extensions.Unpack",
             }:
-                typed_dict = annotation.slice.parent.get_member(annotation.slice.name)
+                typed_dict = annotation.slice.parent.get_member(annotation.slice.name)  # type: ignore[attr-defined]
                 params_doc = {
                     attr.name: {"annotation": attr.annotation, "description": _metadata(attr.annotation).get("doc", "")}
                     for attr in typed_dict.members.values()
@@ -147,13 +147,13 @@ def _yields_docs(func: Function, **kwargs: Any) -> DocstringSectionYields | None
 
     if isinstance(annotation, ExprSubscript):
         if annotation.canonical_path in {"typing.Generator", "typing_extensions.Generator"}:
-            yield_annotation = annotation.slice.elements[0]
+            yield_annotation = annotation.slice.elements[0]  # type: ignore[attr-defined]
         elif annotation.canonical_path in {"typing.Iterator", "typing_extensions.Iterator"}:
             yield_annotation = annotation.slice
 
     if yield_annotation:
         if isinstance(yield_annotation, ExprSubscript) and yield_annotation.is_tuple:
-            yield_elements = yield_annotation.slice.elements
+            yield_elements = yield_annotation.slice.elements  # type: ignore[attr-defined]
         else:
             yield_elements = [yield_annotation]
         yields_section = _to_yields_section({"annotation": element, **_metadata(element)} for element in yield_elements)
@@ -171,11 +171,11 @@ def _receives_docs(func: Function, **kwargs: Any) -> DocstringSectionReceives | 
         "typing.Generator",
         "typing_extensions.Generator",
     }:
-        receive_annotation = annotation.slice.elements[1]
+        receive_annotation = annotation.slice.elements[1]  # type: ignore[attr-defined]
 
     if receive_annotation:
         if isinstance(receive_annotation, ExprSubscript) and receive_annotation.is_tuple:
-            receive_elements = receive_annotation.slice.elements
+            receive_elements = receive_annotation.slice.elements  # type: ignore[attr-defined]
         else:
             receive_elements = [receive_annotation]
         receives_section = _to_receives_section(
@@ -195,11 +195,11 @@ def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | No
         "typing.Generator",
         "typing_extensions.Generator",
     }:
-        return_annotation = annotation.slice.elements[2]
+        return_annotation = annotation.slice.elements[2]  # type: ignore[attr-defined]
 
     if return_annotation:
         if isinstance(return_annotation, ExprSubscript) and return_annotation.is_tuple:
-            return_elements = return_annotation.slice.elements
+            return_elements = return_annotation.slice.elements  # type: ignore[attr-defined]
         else:
             return_elements = [return_annotation]
         returns_section = _to_returns_section(
@@ -213,7 +213,7 @@ def _warns_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> DocstringS
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns
+        annotation = attr_or_func.returns  # type: ignore[union-attr]
     metadata = _metadata(annotation)
     if metadata["warns"]:
         return _to_warns_section({"annotation": warned[0], "description": warned[1]} for warned in metadata["warns"])
@@ -224,7 +224,7 @@ def _raises_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> Docstring
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns
+        annotation = attr_or_func.returns  # type: ignore[union-attr]
     metadata = _metadata(annotation)
     if metadata["raises"]:
         return _to_raises_section({"annotation": raised[0], "description": raised[1]} for raised in metadata["raises"])
@@ -238,7 +238,7 @@ def _deprecated_docs(
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns
+        annotation = attr_or_func.returns  # type: ignore[union-attr]
     metadata = _metadata(annotation)
     if "deprecated" in metadata:
         return _to_deprecated_section({"description": metadata["deprecated"]})
