@@ -41,13 +41,11 @@ def other_parameters(
 
 
 # Documenting yielded and received values, replacing Yields and Receives sections:
-def generator() -> (
-    Generator[
-        Annotated[int, Doc("Yielded integers.")],
-        Annotated[int, Doc("Received integers.")],
-        Annotated[int, Doc("Final returned value.")],
-    ]
-):
+def generator() -> Generator[
+    Annotated[int, Doc("Yielded integers.")],
+    Annotated[int, Doc("Received integers.")],
+    Annotated[int, Doc("Final returned value.")],
+]:
     """Showing off generators."""
 
 
@@ -57,20 +55,18 @@ def iterator() -> Iterator[Annotated[int, Doc("Yielded integers.")]]:
 
 
 # Advanced use-case: documenting multiple yielded/received/returned values:
-def return_tuple() -> (
-    Generator[
-        tuple[
-            Annotated[int, Doc("First element of the yielded value.")],
-            Annotated[float, Doc("Second element of the yielded value.")],
-        ],
-        tuple[
-            Annotated[int, Doc("First element of the received value.")],
-            Annotated[float, Doc("Second element of the received value.")],
-        ],
-        tuple[
-            Annotated[int, Doc("First element of the returned value.")],
-            Annotated[float, Doc("Second element of the returned value.")],
-        ],
-    ]
-):
+def return_tuple() -> Generator[
+    tuple[
+        Annotated[int, Doc("First element of the yielded value.")],
+        Annotated[float, Doc("Second element of the yielded value.")],
+    ],
+    tuple[
+        Annotated[int, Doc("First element of the received value.")],
+        Annotated[float, Doc("Second element of the received value.")],
+    ],
+    tuple[
+        Annotated[int, Doc("First element of the returned value.")],
+        Annotated[float, Doc("Second element of the returned value.")],
+    ],
+]:
     """Showing off tuples as yield/receive/return values."""

@@ -23,8 +23,6 @@ from griffe_typingdoc._docstrings import (
 )
 
 if TYPE_CHECKING:
-    import ast
-
     from griffe import Function
     from griffe.dataclasses import Attribute
     from griffe.docstrings.dataclasses import (
@@ -99,11 +97,11 @@ def _metadata(annotation: str | Expr | None) -> dict[str, Any]:
     return metadata
 
 
-def _attribute_docs(node: ast.AST, attr: Attribute) -> str:  # noqa: ARG001
+def _attribute_docs(attr: Attribute, **kwargs: Any) -> str:  # noqa: ARG001
     return _metadata(attr.annotation).get("doc", "")
 
 
-def _parameters_docs(node: ast.AST, func: Function) -> DocstringSectionParameters | None:  # noqa: ARG001
+def _parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionParameters | None:  # noqa: ARG001
     params_doc: dict[str, dict[str, Any]] = defaultdict(dict)
     for parameter in _no_self_params(func):
         stars = {ParameterKind.var_positional: "*", ParameterKind.var_keyword: "**"}.get(parameter.kind, "")  # type: ignore[arg-type]
@@ -117,7 +115,7 @@ def _parameters_docs(node: ast.AST, func: Function) -> DocstringSectionParameter
     return None
 
 
-def _other_parameters_docs(node: ast.AST, func: Function) -> DocstringSectionParameters | None:  # noqa: ARG001
+def _other_parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionParameters | None:  # noqa: ARG001
     for parameter in func.parameters:
         if parameter.kind is ParameterKind.var_keyword:
             annotation = parameter.annotation
@@ -141,25 +139,15 @@ def _other_parameters_docs(node: ast.AST, func: Function) -> DocstringSectionPar
     return None
 
 
-def _yrr_docs(
-    node: ast.AST,  # noqa: ARG001
-    func: Function,
-) -> tuple[DocstringSectionYields | None, DocstringSectionReceives | None, DocstringSectionReturns | None]:
+def _yields_docs(func: Function, **kwargs: Any) -> DocstringSectionYields | None:  # noqa: ARG001
     yields_section = None
-    receives_section = None
-    returns_section = None
+    yield_annotation = None
 
     annotation = func.returns
-
-    yield_annotation = None
-    receive_annotation = None
-    return_annotation = None
 
     if isinstance(annotation, ExprSubscript):
         if annotation.canonical_path in {"typing.Generator", "typing_extensions.Generator"}:
             yield_annotation = annotation.slice.elements[0]  # type: ignore[attr-defined]
-            receive_annotation = annotation.slice.elements[1]  # type: ignore[attr-defined]
-            return_annotation = annotation.slice.elements[2]  # type: ignore[attr-defined]
         elif annotation.canonical_path in {"typing.Iterator", "typing_extensions.Iterator"}:
             yield_annotation = annotation.slice
 
@@ -170,6 +158,21 @@ def _yrr_docs(
             yield_elements = [yield_annotation]
         yields_section = _to_yields_section({"annotation": element, **_metadata(element)} for element in yield_elements)
 
+    return yields_section
+
+
+def _receives_docs(func: Function, **kwargs: Any) -> DocstringSectionReceives | None:  # noqa: ARG001
+    receives_section = None
+    receive_annotation = None
+
+    annotation = func.returns
+
+    if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
+        "typing.Generator",
+        "typing_extensions.Generator",
+    }:
+        receive_annotation = annotation.slice.elements[1]  # type: ignore[attr-defined]
+
     if receive_annotation:
         if isinstance(receive_annotation, ExprSubscript) and receive_annotation.is_tuple:
             receive_elements = receive_annotation.slice.elements  # type: ignore[attr-defined]
@@ -178,6 +181,21 @@ def _yrr_docs(
         receives_section = _to_receives_section(
             {"annotation": element, **_metadata(element)} for element in receive_elements
         )
+
+    return receives_section
+
+
+def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | None:  # noqa: ARG001
+    returns_section = None
+    return_annotation = None
+
+    annotation = func.returns
+
+    if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
+        "typing.Generator",
+        "typing_extensions.Generator",
+    }:
+        return_annotation = annotation.slice.elements[2]  # type: ignore[attr-defined]
 
     if return_annotation:
         if isinstance(return_annotation, ExprSubscript) and return_annotation.is_tuple:
@@ -188,10 +206,10 @@ def _yrr_docs(
             {"annotation": element, **_metadata(element)} for element in return_elements
         )
 
-    return yields_section, receives_section, returns_section
+    return returns_section
 
 
-def _warns_docs(node: ast.AST, attr_or_func: Attribute | Function) -> DocstringSectionWarns | None:  # noqa: ARG001
+def _warns_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> DocstringSectionWarns | None:  # noqa: ARG001
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
@@ -202,7 +220,7 @@ def _warns_docs(node: ast.AST, attr_or_func: Attribute | Function) -> DocstringS
     return None
 
 
-def _raises_docs(node: ast.AST, attr_or_func: Attribute | Function) -> DocstringSectionRaises | None:  # noqa: ARG001
+def _raises_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> DocstringSectionRaises | None:  # noqa: ARG001
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
@@ -214,8 +232,8 @@ def _raises_docs(node: ast.AST, attr_or_func: Attribute | Function) -> Docstring
 
 
 def _deprecated_docs(
-    node: ast.AST,  # noqa: ARG001
     attr_or_func: Attribute | Function,
+    **kwargs: Any,  # noqa: ARG001
 ) -> DocstringSectionAdmonition | None:
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
