@@ -7,8 +7,16 @@ from griffe.tests import temporary_visited_package
 
 from griffe_typingdoc import TypingDocExtension
 
-typing_imports = "from typing import Annotated, Doc, Generator, Iterator, Name, NotRequired, Raises, TypedDict, Unpack, Warns"
+typing_imports = (
+    "from typing import Annotated, Doc, Generator, Iterator, Name, NotRequired, Raises, TypedDict, Unpack, Warns"
+)
 warning_imports = "from warnings import deprecated"
+
+# NOTE: Important! The value in calls to `Doc` will be parsed as a Name expression
+# if it is valid Python syntax for names. To make sure it is correctly parsed as a string,
+# it must contain invalid syntax for names, such as a dot at the end.
+# The alternative solution would be to add `from __future__ import annotations`
+# at the beginning of each temporary visited module.
 
 
 def test_extension_on_itself() -> None:
@@ -39,7 +47,6 @@ def test_parameter_doc() -> None:
         extensions=Extensions(TypingDocExtension()),
     ) as package:
         assert package["f"].docstring.parsed[1].value[0].description == "Hello."
-
 
 
 def test_other_parameter_doc() -> None:
@@ -133,3 +140,13 @@ def test_generator_tuples() -> None:
         assert sections[2].value[1].description == "Second received."
         assert sections[3].value[0].description == "First returned."
         assert sections[3].value[1].description == "Second returned."
+
+
+def test_return_doc() -> None:
+    """Read documentation for return value."""
+    with temporary_visited_package(
+        "package",
+        modules={"__init__.py": f"{typing_imports}\ndef f() -> Annotated[int, Doc('Hello.')]: ..."},
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        assert package["f"].docstring.parsed[1].value[0].description == "Hello."

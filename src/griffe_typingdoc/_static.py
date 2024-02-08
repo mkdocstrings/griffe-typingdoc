@@ -196,6 +196,11 @@ def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | No
         "typing_extensions.Generator",
     }:
         return_annotation = annotation.slice.elements[2]  # type: ignore[attr-defined]
+    elif isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
+        "typing.Annotated",
+        "typing_extensions.Annotated",
+    }:
+        return_annotation = annotation
 
     if return_annotation:
         if isinstance(return_annotation, ExprSubscript) and return_annotation.is_tuple:
