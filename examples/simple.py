@@ -40,6 +40,12 @@ def other_parameters(
     """Showing off other parameters."""
 
 
+# Documenting returned values, replacing Returns sections:
+def return_value() -> Annotated[int, Doc("Returned integer.")]:
+    """Showing off return values."""
+    return 0
+
+
 # Documenting yielded and received values, replacing Yields and Receives sections:
 def generator() -> Generator[
     Annotated[int, Doc("Yielded integers.")],
