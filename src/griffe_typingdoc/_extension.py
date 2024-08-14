@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from griffe import Docstring, Extension, Function, ObjectNode
 
@@ -107,11 +107,11 @@ class TypingDocExtension(Extension):
             return
         if obj.is_module or obj.is_class:
             for member in obj.members.values():
-                self._handle_object(member)  # type: ignore[arg-type]
+                self._handle_object(member)
         elif obj.is_function:
-            self._handle_function(obj)  # type: ignore[arg-type]
+            self._handle_function(obj)
         elif obj.is_attribute:
-            self._handle_attribute(obj)  # type: ignore[arg-type]
+            self._handle_attribute(obj)
 
     def on_package_loaded(
         self,
@@ -120,6 +120,7 @@ class TypingDocExtension(Extension):
             Module,
             Doc("The top-level module representing a package."),
         ],
+        **kwargs: Any,  # noqa: ARG002
     ) -> None:
         """Post-process Griffe packages recursively (non-yet handled objects only)."""
         self._handle_object(pkg)
@@ -135,6 +136,7 @@ class TypingDocExtension(Extension):
             Function,
             Doc("""The Griffe function just instantiated."""),
         ],
+        **kwargs: Any,  # noqa: ARG002
     ) -> None:
         """Post-process Griffe functions to add a parameters section.
 
@@ -154,6 +156,7 @@ class TypingDocExtension(Extension):
             Attribute,
             Doc("The Griffe attribute just instantiated."),
         ],
+        **kwargs: Any,  # noqa: ARG002
     ) -> None:
         """Post-process Griffe attributes to create their docstring.
 

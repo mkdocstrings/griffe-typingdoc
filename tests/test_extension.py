@@ -1,13 +1,12 @@
 """Tests for the Griffe extension."""
 
-from griffe.docstrings.dataclasses import DocstringSectionKind
-from griffe.extensions import Extensions
-from griffe.loader import GriffeLoader
-from griffe.tests import temporary_visited_package
+from griffe import DocstringSectionKind, Extensions, GriffeLoader, temporary_visited_package
 
 from griffe_typingdoc import TypingDocExtension
 
-typing_imports = "from typing import Annotated, Doc, Generator, Iterator, Name, NotRequired, Raises, TypedDict, Unpack, Warns"
+typing_imports = (
+    "from typing import Annotated, Doc, Generator, Iterator, Name, NotRequired, Raises, TypedDict, Unpack, Warns"
+)
 warning_imports = "from warnings import deprecated"
 
 
@@ -39,7 +38,6 @@ def test_parameter_doc() -> None:
         extensions=Extensions(TypingDocExtension()),
     ) as package:
         assert package["f"].docstring.parsed[1].value[0].description == "Hello."
-
 
 
 def test_other_parameter_doc() -> None:

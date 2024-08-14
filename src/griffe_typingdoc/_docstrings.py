@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, Iterator
 
-from griffe.docstrings.dataclasses import (
+from griffe import (
     DocstringParameter,
     DocstringRaise,
     DocstringReceive,
@@ -22,8 +22,7 @@ from griffe.docstrings.dataclasses import (
 )
 
 if TYPE_CHECKING:
-    from griffe import Function
-    from griffe.dataclasses import Parameter
+    from griffe import Function, Parameter
 
 
 def _no_self_params(func: Function) -> list[Parameter]:
