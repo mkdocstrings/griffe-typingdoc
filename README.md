@@ -1,9 +1,9 @@
 # Griffe TypingDoc
 
 [![ci](https://github.com/mkdocstrings/griffe-typingdoc/workflows/ci/badge.svg)](https://github.com/mkdocstrings/griffe-typingdoc/actions?query=workflow%3Aci)
-[![documentation](https://img.shields.io/badge/docs-mkdocs%20material-blue.svg?style=flat)](https://mkdocstrings.github.io/griffe-typingdoc/)
+[![documentation](https://img.shields.io/badge/docs-mkdocs-708FCC.svg?style=flat)](https://mkdocstrings.github.io/griffe-typingdoc/)
 [![pypi version](https://img.shields.io/pypi/v/griffe-typingdoc.svg)](https://pypi.org/project/griffe-typingdoc/)
-[![gitpod](https://img.shields.io/badge/gitpod-workspace-blue.svg?style=flat)](https://gitpod.io/#https://github.com/mkdocstrings/griffe-typingdoc)
+[![gitpod](https://img.shields.io/badge/gitpod-workspace-708FCC.svg?style=flat)](https://gitpod.io/#https://github.com/mkdocstrings/griffe-typingdoc)
 [![gitter](https://badges.gitter.im/join%20chat.svg)](https://app.gitter.im/#/room/#griffe-typingdoc:gitter.im)
 
 Griffe extension for [PEP 727 – Documentation Metadata in Typing](https://peps.python.org/pep-0727/).
