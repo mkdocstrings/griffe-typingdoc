@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.2.7](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.2.7) - 2024-09-10
+
+<small>[Compare with 0.2.6](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.2.6...0.2.7)</small>
+
+### Bug Fixes
+
+- Resolve names in `Unpack`, instead of naively trying to get them from the parent of the function being handled ([5e06b33](https://github.com/mkdocstrings/griffe-typingdoc/commit/5e06b33651f43b292059d27d3b232e2646a409d5) by Timothée Mazzucotelli). [Issue-11](https://github.com/mkdocstrings/griffe-typingdoc/issues/11)
+
 ## [0.2.6](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.2.6) - 2024-08-14
 
 <small>[Compare with 0.2.5](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.2.5...0.2.6)</small>
