@@ -147,3 +147,58 @@ def test_return_doc() -> None:
         extensions=Extensions(TypingDocExtension()),
     ) as package:
         assert package["f"].docstring.parsed[1].value[0].description == "Hello."
+
+
+def test_unpacking_typed_dict() -> None:
+    """Unpack typed dicts, resolving them to their right location."""
+    with temporary_visited_package(
+        "package",
+        {
+            "__init__.py": """
+                from typing import TypedDict
+                from typing_extensions import Annotated, Doc, Unpack
+
+                from package import module
+
+                class Options(TypedDict):
+                    foo: Annotated[int, Doc("Foo's description.")]
+
+                class A:
+                    def __init__(self, **kwargs: Unpack[Options]) -> None:
+                        '''Init.'''
+                        self.options = kwargs
+
+                class B:
+                    def __init__(self, **kwargs: Unpack[module.Options]) -> None:
+                        '''Init.'''
+                        self.options = kwargs
+                """,
+            "module.py": """
+                from typing import TypedDict
+                from typing_extensions import Annotated, Doc
+
+                class Options(TypedDict):
+                    bar: Annotated[str, Doc("Bar's description.")]
+                """,
+        },
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        sections = package["A.__init__"].docstring.parsed
+        assert len(sections) == 3
+        assert sections[0].kind is DocstringSectionKind.text
+        assert sections[1].kind is DocstringSectionKind.parameters
+        assert sections[2].kind is DocstringSectionKind.other_parameters
+        foo = sections[2].value[0]
+        assert foo.name == "foo"
+        assert foo.description == "Foo's description."
+        assert str(foo.annotation).startswith("Annotated[int")
+
+        sections = package["B.__init__"].docstring.parsed
+        assert len(sections) == 3
+        assert sections[0].kind is DocstringSectionKind.text
+        assert sections[1].kind is DocstringSectionKind.parameters
+        assert sections[2].kind is DocstringSectionKind.other_parameters
+        bar = sections[2].value[0]
+        assert bar.name == "bar"
+        assert bar.description == "Bar's description."
+        assert str(bar.annotation).startswith("Annotated[str")

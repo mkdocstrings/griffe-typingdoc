@@ -127,7 +127,8 @@ def _other_parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionPar
                 "typing.Unpack",
                 "typing_extensions.Unpack",
             }:
-                typed_dict = annotation.slice.parent.get_member(annotation.slice.name)  # type: ignore[attr-defined]
+                slice_path = annotation.slice.canonical_path
+                typed_dict = func.modules_collection[slice_path]
                 params_doc = {
                     attr.name: {"annotation": attr.annotation, "description": _metadata(attr.annotation).get("doc", "")}
                     for attr in typed_dict.members.values()
