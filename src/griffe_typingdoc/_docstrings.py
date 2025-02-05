@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Iterator
+from typing import TYPE_CHECKING, Any
 
 from griffe import (
     DocstringParameter,
@@ -22,6 +22,8 @@ from griffe import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     from griffe import Function, Parameter
 
 

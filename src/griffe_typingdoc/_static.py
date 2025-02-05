@@ -5,7 +5,7 @@ from __future__ import annotations
 import inspect
 from ast import literal_eval
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, Sequence
+from typing import TYPE_CHECKING, Any
 
 from griffe import Expr, ExprCall, ExprSubscript, ExprTuple, ParameterKind
 
@@ -22,6 +22,8 @@ from griffe_typingdoc._docstrings import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from griffe import Function
     from griffe.dataclasses import Attribute
     from griffe.docstrings.dataclasses import (
@@ -106,7 +108,7 @@ def _parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionParameter
         stars = {ParameterKind.var_positional: "*", ParameterKind.var_keyword: "**"}.get(parameter.kind, "")  # type: ignore[arg-type]
         param_name = f"{stars}{parameter.name}"
         metadata = _metadata(parameter.annotation)
-        description = f'{metadata.get("deprecated", "")} {metadata.get("doc", "")}'.lstrip()
+        description = f"{metadata.get('deprecated', '')} {metadata.get('doc', '')}".lstrip()
         params_doc[param_name]["annotation"] = parameter.annotation
         params_doc[param_name]["description"] = description
     if params_doc:

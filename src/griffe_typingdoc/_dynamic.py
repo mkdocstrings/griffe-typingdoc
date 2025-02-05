@@ -2,9 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
-
-from typing_extensions import get_type_hints
+from typing import TYPE_CHECKING, Any, get_type_hints
 
 from griffe_typingdoc._docstrings import _to_parameters_section
 

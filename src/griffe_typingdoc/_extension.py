@@ -10,9 +10,10 @@ from griffe_typingdoc import _dynamic, _static
 
 if TYPE_CHECKING:
     import ast
+    from typing import Annotated
 
     from griffe.dataclasses import Attribute, Module, Object
-    from typing_extensions import Annotated, Doc
+    from typing_extensions import Doc
 
 
 class TypingDocExtension(Extension):
