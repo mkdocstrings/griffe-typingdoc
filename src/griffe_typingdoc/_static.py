@@ -124,12 +124,12 @@ def _other_parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionPar
                 "typing.Annotated",
                 "typing_extensions.Annotated",
             }:
-                annotation = annotation.slice.elements[0]  # type: ignore[attr-defined]
+                annotation = annotation.slice.elements[0]  # type: ignore[union-attr]
             if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
                 "typing.Unpack",
                 "typing_extensions.Unpack",
             }:
-                slice_path = annotation.slice.canonical_path
+                slice_path = annotation.slice.canonical_path  # type: ignore[union-attr]
                 typed_dict = func.modules_collection[slice_path]
                 params_doc = {
                     attr.name: {"annotation": attr.annotation, "description": _metadata(attr.annotation).get("doc", "")}
@@ -149,13 +149,13 @@ def _yields_docs(func: Function, **kwargs: Any) -> DocstringSectionYields | None
 
     if isinstance(annotation, ExprSubscript):
         if annotation.canonical_path in {"typing.Generator", "typing_extensions.Generator"}:
-            yield_annotation = annotation.slice.elements[0]  # type: ignore[attr-defined]
+            yield_annotation = annotation.slice.elements[0]  # type: ignore[union-attr]
         elif annotation.canonical_path in {"typing.Iterator", "typing_extensions.Iterator"}:
             yield_annotation = annotation.slice
 
     if yield_annotation:
         if isinstance(yield_annotation, ExprSubscript) and yield_annotation.is_tuple:
-            yield_elements = yield_annotation.slice.elements  # type: ignore[attr-defined]
+            yield_elements = yield_annotation.slice.elements  # type: ignore[union-attr]
         else:
             yield_elements = [yield_annotation]
         yields_section = _to_yields_section({"annotation": element, **_metadata(element)} for element in yield_elements)
@@ -173,11 +173,11 @@ def _receives_docs(func: Function, **kwargs: Any) -> DocstringSectionReceives | 
         "typing.Generator",
         "typing_extensions.Generator",
     }:
-        receive_annotation = annotation.slice.elements[1]  # type: ignore[attr-defined]
+        receive_annotation = annotation.slice.elements[1]  # type: ignore[union-attr]
 
     if receive_annotation:
         if isinstance(receive_annotation, ExprSubscript) and receive_annotation.is_tuple:
-            receive_elements = receive_annotation.slice.elements  # type: ignore[attr-defined]
+            receive_elements = receive_annotation.slice.elements  # type: ignore[union-attr]
         else:
             receive_elements = [receive_annotation]
         receives_section = _to_receives_section(
@@ -197,7 +197,7 @@ def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | No
         "typing.Generator",
         "typing_extensions.Generator",
     }:
-        return_annotation = annotation.slice.elements[2]  # type: ignore[attr-defined]
+        return_annotation = annotation.slice.elements[2]  # type: ignore[union-attr]
     elif isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
         "typing.Annotated",
         "typing_extensions.Annotated",
@@ -206,7 +206,7 @@ def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | No
 
     if return_annotation:
         if isinstance(return_annotation, ExprSubscript) and return_annotation.is_tuple:
-            return_elements = return_annotation.slice.elements  # type: ignore[attr-defined]
+            return_elements = return_annotation.slice.elements  # type: ignore[union-attr]
         else:
             return_elements = [return_annotation]
         returns_section = _to_returns_section(
