@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.2.8](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.2.8) - 2025-02-18
+
+<small>[Compare with 0.2.7](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.2.7...0.2.8)</small>
+
+### Code Refactoring
+
+- Only add docstring sections when elements are annotated with `Doc` ([514467c](https://github.com/mkdocstrings/griffe-typingdoc/commit/514467c06f4381fca9c5f96a860c8abd87c1827b) by Timothée Mazzucotelli). [Issue-13](https://github.com/mkdocstrings/griffe-typingdoc/issues/13)
+
 ## [0.2.7](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.2.7) - 2024-09-10
 
 <small>[Compare with 0.2.6](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.2.6...0.2.7)</small>
