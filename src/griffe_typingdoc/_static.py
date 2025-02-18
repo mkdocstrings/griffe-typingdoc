@@ -103,16 +103,17 @@ def _attribute_docs(attr: Attribute, **kwargs: Any) -> str:  # noqa: ARG001
 
 
 def _parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionParameters | None:  # noqa: ARG001
-    params_doc: dict[str, dict[str, Any]] = defaultdict(dict)
+    params_data: dict[str, dict[str, Any]] = defaultdict(dict)
     for parameter in _no_self_params(func):
         stars = {ParameterKind.var_positional: "*", ParameterKind.var_keyword: "**"}.get(parameter.kind, "")  # type: ignore[arg-type]
         param_name = f"{stars}{parameter.name}"
         metadata = _metadata(parameter.annotation)
-        description = f"{metadata.get('deprecated', '')} {metadata.get('doc', '')}".lstrip()
-        params_doc[param_name]["annotation"] = parameter.annotation
-        params_doc[param_name]["description"] = description
-    if params_doc:
-        return _to_parameters_section(params_doc, func)
+        if "deprecated" in metadata or "doc" in metadata:
+            description = f"{metadata.get('deprecated', '')} {metadata.get('doc', '')}".lstrip()
+            params_data[param_name]["description"] = description
+            params_data[param_name]["annotation"] = parameter.annotation
+    if params_data:
+        return _to_parameters_section(params_data, func)
     return None
 
 
@@ -131,20 +132,19 @@ def _other_parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionPar
             }:
                 slice_path = annotation.slice.canonical_path  # type: ignore[union-attr]
                 typed_dict = func.modules_collection[slice_path]
-                params_doc = {
-                    attr.name: {"annotation": attr.annotation, "description": _metadata(attr.annotation).get("doc", "")}
+                params_data = {
+                    attr.name: {"annotation": attr.annotation, "description": description}
                     for attr in typed_dict.members.values()
+                    if (description := _metadata(attr.annotation).get("doc")) is not None
                 }
-                if params_doc:
-                    return _to_other_parameters_section(params_doc)
+                if params_data:
+                    return _to_other_parameters_section(params_data)
             break
     return None
 
 
 def _yields_docs(func: Function, **kwargs: Any) -> DocstringSectionYields | None:  # noqa: ARG001
-    yields_section = None
     yield_annotation = None
-
     annotation = func.returns
 
     if isinstance(annotation, ExprSubscript):
@@ -158,15 +158,19 @@ def _yields_docs(func: Function, **kwargs: Any) -> DocstringSectionYields | None
             yield_elements = yield_annotation.slice.elements  # type: ignore[union-attr]
         else:
             yield_elements = [yield_annotation]
-        yields_section = _to_yields_section({"annotation": element, **_metadata(element)} for element in yield_elements)
+        yield_data = [
+            {"annotation": element, **metadata}
+            for element in yield_elements
+            if "doc" in (metadata := _metadata(element))
+        ]
+        if yield_data:
+            return _to_yields_section(yield_data)
 
-    return yields_section
+    return None
 
 
 def _receives_docs(func: Function, **kwargs: Any) -> DocstringSectionReceives | None:  # noqa: ARG001
-    receives_section = None
     receive_annotation = None
-
     annotation = func.returns
 
     if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
@@ -180,17 +184,19 @@ def _receives_docs(func: Function, **kwargs: Any) -> DocstringSectionReceives | 
             receive_elements = receive_annotation.slice.elements  # type: ignore[union-attr]
         else:
             receive_elements = [receive_annotation]
-        receives_section = _to_receives_section(
-            {"annotation": element, **_metadata(element)} for element in receive_elements
-        )
+        receive_data = [
+            {"annotation": element, **metadata}
+            for element in receive_elements
+            if "doc" in (metadata := _metadata(element))
+        ]
+        if receive_data:
+            return _to_receives_section(receive_data)
 
-    return receives_section
+    return None
 
 
 def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | None:  # noqa: ARG001
-    returns_section = None
     return_annotation = None
-
     annotation = func.returns
 
     if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
@@ -209,11 +215,15 @@ def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | No
             return_elements = return_annotation.slice.elements  # type: ignore[union-attr]
         else:
             return_elements = [return_annotation]
-        returns_section = _to_returns_section(
-            {"annotation": element, **_metadata(element)} for element in return_elements
-        )
+        return_data = [
+            {"annotation": element, **metadata}
+            for element in return_elements
+            if "doc" in (metadata := _metadata(element))
+        ]
+        if return_data:
+            return _to_returns_section(return_data)
 
-    return returns_section
+    return None
 
 
 def _warns_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> DocstringSectionWarns | None:  # noqa: ARG001

@@ -22,7 +22,7 @@ from griffe import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterable
 
     from griffe import Function, Parameter
 
@@ -60,7 +60,7 @@ def _to_other_parameters_section(params_dict: dict[str, dict[str, Any]]) -> Docs
     )
 
 
-def _to_yields_section(yield_data: Iterator[dict[str, Any]]) -> DocstringSectionYields:
+def _to_yields_section(yield_data: Iterable[dict[str, Any]]) -> DocstringSectionYields:
     return DocstringSectionYields(
         [
             DocstringYield(
@@ -73,7 +73,7 @@ def _to_yields_section(yield_data: Iterator[dict[str, Any]]) -> DocstringSection
     )
 
 
-def _to_receives_section(receive_data: Iterator[dict[str, Any]]) -> DocstringSectionReceives:
+def _to_receives_section(receive_data: Iterable[dict[str, Any]]) -> DocstringSectionReceives:
     return DocstringSectionReceives(
         [
             DocstringReceive(
@@ -86,7 +86,7 @@ def _to_receives_section(receive_data: Iterator[dict[str, Any]]) -> DocstringSec
     )
 
 
-def _to_returns_section(return_data: Iterator[dict[str, Any]]) -> DocstringSectionReturns:
+def _to_returns_section(return_data: Iterable[dict[str, Any]]) -> DocstringSectionReturns:
     return DocstringSectionReturns(
         [
             DocstringReturn(
@@ -99,7 +99,7 @@ def _to_returns_section(return_data: Iterator[dict[str, Any]]) -> DocstringSecti
     )
 
 
-def _to_warns_section(warn_data: Iterator[dict[str, Any]]) -> DocstringSectionWarns:
+def _to_warns_section(warn_data: Iterable[dict[str, Any]]) -> DocstringSectionWarns:
     return DocstringSectionWarns(
         [
             DocstringWarn(
@@ -111,7 +111,7 @@ def _to_warns_section(warn_data: Iterator[dict[str, Any]]) -> DocstringSectionWa
     )
 
 
-def _to_raises_section(raise_data: Iterator[dict[str, Any]]) -> DocstringSectionRaises:
+def _to_raises_section(raise_data: Iterable[dict[str, Any]]) -> DocstringSectionRaises:
     return DocstringSectionRaises(
         [
             DocstringRaise(

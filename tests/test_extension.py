@@ -1,5 +1,6 @@
 """Tests for the Griffe extension."""
 
+import pytest
 from griffe import DocstringSectionKind, Extensions, GriffeLoader, temporary_visited_package
 
 from griffe_typingdoc import TypingDocExtension
@@ -184,21 +185,116 @@ def test_unpacking_typed_dict() -> None:
         extensions=Extensions(TypingDocExtension()),
     ) as package:
         sections = package["A.__init__"].docstring.parsed
-        assert len(sections) == 3
+        assert len(sections) == 2
         assert sections[0].kind is DocstringSectionKind.text
-        assert sections[1].kind is DocstringSectionKind.parameters
-        assert sections[2].kind is DocstringSectionKind.other_parameters
-        foo = sections[2].value[0]
+        assert sections[1].kind is DocstringSectionKind.other_parameters
+        foo = sections[1].value[0]
         assert foo.name == "foo"
         assert foo.description == "Foo's description."
         assert str(foo.annotation).startswith("Annotated[int")
 
         sections = package["B.__init__"].docstring.parsed
-        assert len(sections) == 3
+        assert len(sections) == 2
         assert sections[0].kind is DocstringSectionKind.text
-        assert sections[1].kind is DocstringSectionKind.parameters
-        assert sections[2].kind is DocstringSectionKind.other_parameters
-        bar = sections[2].value[0]
+        assert sections[1].kind is DocstringSectionKind.other_parameters
+        bar = sections[1].value[0]
         assert bar.name == "bar"
         assert bar.description == "Bar's description."
         assert str(bar.annotation).startswith("Annotated[str")
+
+
+@pytest.mark.parametrize(
+    "annotation",
+    ["int", "Annotated[int, '']"],
+)
+def test_ignore_unannotated_params(annotation: str) -> None:
+    """Ignore parameters that are not annotated with `Doc`."""
+    with temporary_visited_package(
+        "package",
+        {
+            "__init__.py": f"{typing_imports}\ndef f(a: {annotation}):\n    '''Docstring.'''",
+        },
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        sections = package["f"].docstring.parsed
+        assert len(sections) == 1
+        assert sections[0].kind is DocstringSectionKind.text
+
+
+@pytest.mark.parametrize(
+    "annotation",
+    ["int", "Annotated[int, '']"],
+)
+def test_ignore_unannotated_other_params(annotation: str) -> None:
+    """Ignore other parameters that are not annotated with `Doc`."""
+    with temporary_visited_package(
+        "package",
+        {
+            "__init__.py": f"""
+            {typing_imports}
+            from typing import TypedDict
+            class Kwargs(TypedDict):
+                a: {annotation}
+            def f(**kwargs: Unpack[Kwargs]):
+                '''Docstring.'''
+            """,
+        },
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        sections = package["f"].docstring.parsed
+        assert len(sections) == 1
+        assert sections[0].kind is DocstringSectionKind.text
+
+
+@pytest.mark.parametrize(
+    "annotation",
+    ["int", "Annotated[int, '']"],
+)
+def test_ignore_unannotated_returns(annotation: str) -> None:
+    """Ignore return values that are not annotated with `Doc`."""
+    with temporary_visited_package(
+        "package",
+        {
+            "__init__.py": f"{typing_imports}\ndef f() -> {annotation}:\n    '''Docstring.'''",
+        },
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        sections = package["f"].docstring.parsed
+        assert len(sections) == 1
+        assert sections[0].kind is DocstringSectionKind.text
+
+
+@pytest.mark.parametrize(
+    "annotation",
+    ["int", "Annotated[int, '']"],
+)
+def test_ignore_unannotated_yields(annotation: str) -> None:
+    """Ignore yields that are not annotated with `Doc`."""
+    with temporary_visited_package(
+        "package",
+        {
+            "__init__.py": f"{typing_imports}\ndef f() -> Iterator[{annotation}]:\n    '''Docstring.'''",
+        },
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        sections = package["f"].docstring.parsed
+        assert len(sections) == 1
+        assert sections[0].kind is DocstringSectionKind.text
+
+
+@pytest.mark.parametrize(
+    "annotation",
+    ["int", "Annotated[int, '']"],
+)
+def test_ignore_unannotated_receives(annotation: str) -> None:
+    """Ignore receives that are not annotated with `Doc`."""
+    with temporary_visited_package(
+        "package",
+        {
+            "__init__.py": f"{typing_imports}\ndef f() -> Generator[int, {annotation}, None]:\n    '''Docstring.'''",
+        },
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        sections = package["f"].docstring.parsed
+        assert len(sections) == 1
+        assert sections[0].kind is DocstringSectionKind.text
