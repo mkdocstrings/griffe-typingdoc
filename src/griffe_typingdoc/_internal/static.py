@@ -230,7 +230,9 @@ def _warns_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> DocstringS
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns
+        annotation = attr_or_func.returns  # type: ignore[union-attr]
+    else:
+        return None
     metadata = _metadata(annotation)
     if metadata["warns"]:
         return _to_warns_section({"annotation": warned[0], "description": warned[1]} for warned in metadata["warns"])
@@ -241,7 +243,9 @@ def _raises_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> Docstring
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns
+        annotation = attr_or_func.returns  # type: ignore[union-attr]
+    else:
+        return None
     metadata = _metadata(annotation)
     if metadata["raises"]:
         return _to_raises_section({"annotation": raised[0], "description": raised[1]} for raised in metadata["raises"])
@@ -255,7 +259,9 @@ def _deprecated_docs(
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns
+        annotation = attr_or_func.returns  # type: ignore[union-attr]
+    else:
+        return None
     metadata = _metadata(annotation)
     if "deprecated" in metadata:
         return _to_deprecated_section({"description": metadata["deprecated"]})
