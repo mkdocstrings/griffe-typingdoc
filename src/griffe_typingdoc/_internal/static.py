@@ -1,4 +1,4 @@
-"""Helpers to get documentation metadata statically."""
+# Helpers to get documentation metadata statically.
 
 from __future__ import annotations
 
@@ -24,9 +24,8 @@ from griffe_typingdoc._internal.docstrings import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from griffe import Function
-    from griffe.dataclasses import Attribute
-    from griffe.docstrings.dataclasses import (
+    from griffe import (
+        Attribute,
         DocstringSectionAdmonition,
         DocstringSectionParameters,
         DocstringSectionRaises,
@@ -34,6 +33,7 @@ if TYPE_CHECKING:
         DocstringSectionReturns,
         DocstringSectionWarns,
         DocstringSectionYields,
+        Function,
     )
 
 

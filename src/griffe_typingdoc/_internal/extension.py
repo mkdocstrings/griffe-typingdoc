@@ -1,10 +1,10 @@
-"""This module defines the Griffe TypingDoc extension."""
+# This module defines the Griffe TypingDoc extension.
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from griffe import Docstring, Extension, Function, ObjectNode
+from griffe import Alias, Docstring, Extension, Function, ObjectNode
 
 from griffe_typingdoc._internal import dynamic, static
 
@@ -103,18 +103,18 @@ class TypingDocExtension(Extension):
         if returns_section:
             sections.append(returns_section)
 
-    def _handle_object(self, obj: Object) -> None:
+    def _handle_object(self, obj: Object | Alias) -> None:
         if obj.is_alias:
             return
         if obj.is_module or obj.is_class:
             for member in obj.members.values():
                 self._handle_object(member)
         elif obj.is_function:
-            self._handle_function(obj)
+            self._handle_function(obj)  # type: ignore[arg-type]
         elif obj.is_attribute:
-            self._handle_attribute(obj)
+            self._handle_attribute(obj)  # type: ignore[arg-type]
 
-    def on_package_loaded(
+    def on_package(
         self,
         *,
         pkg: Annotated[

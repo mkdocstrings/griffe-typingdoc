@@ -1,4 +1,4 @@
-"""Helpers to get documentation metadata dynamically."""
+# Helpers to get documentation metadata dynamically.
 
 from __future__ import annotations
 
