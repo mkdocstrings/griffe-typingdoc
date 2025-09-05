@@ -1,0 +1,12 @@
+# Griffe TypingDoc
+
+> Griffe extension for PEP 727 – Documentation Metadata in Typing.
+
+## Usage
+
+- [Overview](https://mkdocstrings.github.io/griffe-typingdoc/index.md)
+
+## API
+
+- [API reference](https://mkdocstrings.github.io/griffe-typingdoc/reference/api/index.md)
+
