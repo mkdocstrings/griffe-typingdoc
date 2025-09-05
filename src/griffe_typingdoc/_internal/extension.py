@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING, Any
 
 from griffe import Docstring, Extension, Function, ObjectNode
 
-from griffe_typingdoc._internal import static
-from griffe_typingdoc._internal import dynamic
+from griffe_typingdoc._internal import dynamic, static
 
 if TYPE_CHECKING:
     import ast
