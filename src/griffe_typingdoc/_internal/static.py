@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any
 
 from griffe import Expr, ExprCall, ExprSubscript, ExprTuple, ParameterKind
 
-from griffe_typingdoc._docstrings import (
+from griffe_typingdoc._internal.docstrings import (
     _no_self_params,
     _to_deprecated_section,
     _to_other_parameters_section,

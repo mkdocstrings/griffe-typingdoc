@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, get_type_hints
 
-from griffe_typingdoc._docstrings import _to_parameters_section
+from griffe_typingdoc._internal.docstrings import _to_parameters_section
 
 if TYPE_CHECKING:
     from griffe import Attribute, Function, ObjectNode
-    from griffe.docstrings.dataclasses import (
+    from griffe import (
         DocstringSectionAdmonition,
         DocstringSectionOtherParameters,
         DocstringSectionParameters,

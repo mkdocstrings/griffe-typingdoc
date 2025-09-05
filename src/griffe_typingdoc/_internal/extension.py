@@ -6,13 +6,14 @@ from typing import TYPE_CHECKING, Any
 
 from griffe import Docstring, Extension, Function, ObjectNode
 
-from griffe_typingdoc import _dynamic, _static
+from griffe_typingdoc._internal import static
+from griffe_typingdoc._internal import dynamic
 
 if TYPE_CHECKING:
     import ast
     from typing import Annotated
 
-    from griffe.dataclasses import Attribute, Module, Object
+    from griffe import Attribute, Module, Object
     from typing_extensions import Doc
 
 
@@ -27,7 +28,7 @@ class TypingDocExtension(Extension):
             return
         self._handled.add(attr.path)
 
-        module = _dynamic if node else _static
+        module = dynamic if node else static
 
         new_sections = (
             docstring := module._attribute_docs(attr, node=node),
@@ -58,7 +59,7 @@ class TypingDocExtension(Extension):
             return
         self._handled.add(func.path)
 
-        module = _dynamic if node else _static
+        module = dynamic if node else static
 
         new_sections = (
             deprecated_section := module._deprecated_docs(func, node=node),

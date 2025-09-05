@@ -1,5 +1,5 @@
-# Changes here will be overwritten by Copier
-_commit: 1.5.7
+# Changes here will be overwritten by Copier.
+_commit: 1.9.0
 _src_path: gh:pawamoy/copier-uv
 author_email: pawamoy@pm.me
 author_fullname: Timothée Mazzucotelli
@@ -7,7 +7,7 @@ author_username: pawamoy
 copyright_date: '2023'
 copyright_holder: Timothée Mazzucotelli
 copyright_holder_email: pawamoy@pm.me
-copyright_license: ISC License
+copyright_license: ISC
 insiders: false
 project_description: Griffe extension for PEP 727 – Documentation Metadata in Typing.
 project_name: Griffe TypingDoc
