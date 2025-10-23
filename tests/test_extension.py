@@ -298,3 +298,23 @@ def test_ignore_unannotated_receives(annotation: str) -> None:
         sections = package["f"].docstring.parsed
         assert len(sections) == 1
         assert sections[0].kind is DocstringSectionKind.text
+
+
+def test_support_annotated_doc_package() -> None:
+    """Test that the extension supports annotated-doc's Doc."""
+    code = """
+        from typing import Annotated
+        from annotated_doc import Doc
+        def hi(name: Annotated[str, Doc('Who to say hi to')]) -> None:
+            '''Says hi.'''
+            pass
+    """
+    with temporary_visited_package(
+        "package",
+        modules={"__init__.py": code},
+        extensions=Extensions(TypingDocExtension()),
+    ) as package:
+        sections = package["hi"].docstring.parsed
+        assert len(sections) == 2
+        assert sections[1].kind is DocstringSectionKind.parameters
+        assert sections[1].value[0].description == "Who to say hi to"

@@ -62,6 +62,7 @@ def _set_metadata_warns(metadata: dict[str, Any], data: ExprCall) -> None:
 
 
 _set_metadata_map = {
+    "annotated_doc.Doc": _set_metadata_doc,
     "typing.Doc": _set_metadata_doc,
     "typing_extensions.Doc": _set_metadata_doc,
     "typing.deprecated": _set_metadata_deprecated,
