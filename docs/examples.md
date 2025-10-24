@@ -22,9 +22,9 @@ hide:
 ## Enhanced
 
 > WARNING: **Non-standard features**
-The "enhanced" features are not part of PEP 727.
+The "enhanced" features are not part of `annotated-doc` or PEP 727.
 They just serve as an example to show what would be possible
-if the PEP was enhanced to account for more use-cases.
+if the package or PEP were enhanced to account for more use-cases.
 
 /// details | `enhanced` Python module
     type: example
