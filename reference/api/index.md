@@ -2,7 +2,9 @@
 
 Griffe TypingDoc package.
 
-Griffe extension for PEP 727 - Documentation Metadata in Typing.
+Griffe extension for `annotated-doc` (originally PEP 727):
+
+> Document parameters, class attributes, return types, and variables inline, with Annotated.
 
 Classes:
 

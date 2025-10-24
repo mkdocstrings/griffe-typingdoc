@@ -1,6 +1,8 @@
 # Griffe TypingDoc
 
-Griffe extension for [PEP 727 – Documentation Metadata in Typing](https://peps.python.org/pep-0727/).
+Griffe extension for [`annotated-doc`](https://pypi.org/project/annotated-doc/) (originally [PEP 727](https://peps.python.org/pep-0727/)):
+
+> Document parameters, class attributes, return types, and variables inline, with Annotated.
 
 ## Installation
 
