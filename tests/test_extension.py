@@ -44,7 +44,7 @@ def test_parameter_doc() -> None:
         modules={"__init__.py": f"{typing_imports}\ndef f(a: Annotated[str, Doc('Hello.')]): ..."},
         extensions=Extensions(TypingDocExtension()),
     ) as package:
-        assert package["f"].docstring.parsed[1].value[0].description == "Hello."
+        assert package["f"].docstring.parsed[0].value[0].description == "Hello."
 
 
 def test_other_parameter_doc() -> None:
@@ -63,7 +63,7 @@ def test_other_parameter_doc() -> None:
         },
         extensions=Extensions(TypingDocExtension()),
     ) as package:
-        assert package["f"].docstring.parsed[2].value[0].description == "Hello."
+        assert package["f"].docstring.parsed[0].value[0].description == "Hello."
 
 
 def test_iterator_doc() -> None:
@@ -79,7 +79,7 @@ def test_iterator_doc() -> None:
         },
         extensions=Extensions(TypingDocExtension()),
     ) as package:
-        assert package["f"].docstring.parsed[1].value[0].description == "Yielded hello."
+        assert package["f"].docstring.parsed[0].value[0].description == "Yielded hello."
 
 
 def test_generator_doc() -> None:
@@ -100,9 +100,9 @@ def test_generator_doc() -> None:
         extensions=Extensions(TypingDocExtension()),
     ) as package:
         sections = package["f"].docstring.parsed
-        assert sections[1].value[0].description == "Yielded hello."
-        assert sections[2].value[0].description == "Received hello."
-        assert sections[3].value[0].description == "Returned hello."
+        assert sections[0].value[0].description == "Yielded hello."
+        assert sections[1].value[0].description == "Received hello."
+        assert sections[2].value[0].description == "Returned hello."
 
 
 def test_generator_tuples() -> None:
@@ -132,12 +132,12 @@ def test_generator_tuples() -> None:
         extensions=Extensions(TypingDocExtension()),
     ) as package:
         sections = package["f"].docstring.parsed
-        assert sections[1].value[0].description == "First yielded."
-        assert sections[1].value[1].description == "Second yielded."
-        assert sections[2].value[0].description == "First received."
-        assert sections[2].value[1].description == "Second received."
-        assert sections[3].value[0].description == "First returned."
-        assert sections[3].value[1].description == "Second returned."
+        assert sections[0].value[0].description == "First yielded."
+        assert sections[0].value[1].description == "Second yielded."
+        assert sections[1].value[0].description == "First received."
+        assert sections[1].value[1].description == "Second received."
+        assert sections[2].value[0].description == "First returned."
+        assert sections[2].value[1].description == "Second returned."
 
 
 def test_return_doc() -> None:
@@ -147,7 +147,7 @@ def test_return_doc() -> None:
         modules={"__init__.py": f"{typing_imports}\ndef f() -> Annotated[int, Doc('Hello.')]: ..."},
         extensions=Extensions(TypingDocExtension()),
     ) as package:
-        assert package["f"].docstring.parsed[1].value[0].description == "Hello."
+        assert package["f"].docstring.parsed[0].value[0].description == "Hello."
 
 
 def test_unpacking_typed_dict() -> None:
