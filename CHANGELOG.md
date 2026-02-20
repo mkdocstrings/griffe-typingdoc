@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [0.3.1](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.3.1) - 2026-02-20
+
+<small>[Compare with 0.3.0](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.3.0...0.3.1)</small>
+
+### Build
+
+- Depend on griffelib instead of griffe ([c9625b4](https://github.com/mkdocstrings/griffe-typingdoc/commit/c9625b4999d0ecb84dba1d7f99a830be7dbd8a46) by Timothée Mazzucotelli).
+
 ## [0.3.0](https://github.com/mkdocstrings/griffe-typingdoc/releases/tag/0.3.0) - 2025-10-23
 
 <small>[Compare with 0.2.9](https://github.com/mkdocstrings/griffe-typingdoc/compare/0.2.9...0.3.0)</small>
