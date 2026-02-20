@@ -163,7 +163,7 @@ configurations = [{targets.include = ["reference/api.md"]}]
 # Plugins configuration
 # ----------------------------------------------------------------------------
 [project.plugins.mkdocstrings.handlers.python]
-paths = ["src"]
+paths = ["src", "examples"]
 inventories = ["https://docs.python.org/3/objects.inv"]
 
 [project.plugins.mkdocstrings.handlers.python.options]

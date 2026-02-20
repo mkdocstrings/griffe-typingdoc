@@ -11,7 +11,7 @@ hide:
     type: example
 
 ```python
---8<-- "docs/examples/simple.py"
+--8<-- "examples/simple.py"
 ```
 ///
 
@@ -30,7 +30,7 @@ if the package or PEP were enhanced to account for more use-cases.
     type: example
 
 ```python
---8<-- "docs/examples/enhanced.py"
+--8<-- "examples/enhanced.py"
 ```
 ///
 
