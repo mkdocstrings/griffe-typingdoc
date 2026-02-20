@@ -106,7 +106,7 @@ def _attribute_docs(attr: Attribute, **kwargs: Any) -> str:  # noqa: ARG001
 def _parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionParameters | None:  # noqa: ARG001
     params_data: dict[str, dict[str, Any]] = defaultdict(dict)
     for parameter in _no_self_params(func):
-        stars = {ParameterKind.var_positional: "*", ParameterKind.var_keyword: "**"}.get(parameter.kind, "")  # type: ignore[arg-type]
+        stars = {ParameterKind.var_positional: "*", ParameterKind.var_keyword: "**"}.get(parameter.kind, "")
         param_name = f"{stars}{parameter.name}"
         metadata = _metadata(parameter.annotation)
         if "deprecated" in metadata or "doc" in metadata:
@@ -126,12 +126,12 @@ def _other_parameters_docs(func: Function, **kwargs: Any) -> DocstringSectionPar
                 "typing.Annotated",
                 "typing_extensions.Annotated",
             }:
-                annotation = annotation.slice.elements[0]  # type: ignore[union-attr]
+                annotation = annotation.slice.elements[0]
             if isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
                 "typing.Unpack",
                 "typing_extensions.Unpack",
             }:
-                slice_path = annotation.slice.canonical_path  # type: ignore[union-attr]
+                slice_path = annotation.slice.canonical_path
                 typed_dict = func.modules_collection[slice_path]
                 params_data = {
                     attr.name: {"annotation": attr.annotation, "description": description}
@@ -150,13 +150,13 @@ def _yields_docs(func: Function, **kwargs: Any) -> DocstringSectionYields | None
 
     if isinstance(annotation, ExprSubscript):
         if annotation.canonical_path in {"typing.Generator", "typing_extensions.Generator"}:
-            yield_annotation = annotation.slice.elements[0]  # type: ignore[union-attr]
+            yield_annotation = annotation.slice.elements[0]  # ty:ignore[unresolved-attribute]
         elif annotation.canonical_path in {"typing.Iterator", "typing_extensions.Iterator"}:
             yield_annotation = annotation.slice
 
     if yield_annotation:
         if isinstance(yield_annotation, ExprSubscript) and yield_annotation.is_tuple:
-            yield_elements = yield_annotation.slice.elements  # type: ignore[union-attr]
+            yield_elements = yield_annotation.slice.elements  # ty:ignore[unresolved-attribute]
         else:
             yield_elements = [yield_annotation]
         yield_data = [
@@ -178,11 +178,11 @@ def _receives_docs(func: Function, **kwargs: Any) -> DocstringSectionReceives | 
         "typing.Generator",
         "typing_extensions.Generator",
     }:
-        receive_annotation = annotation.slice.elements[1]  # type: ignore[union-attr]
+        receive_annotation = annotation.slice.elements[1]  # ty:ignore[unresolved-attribute]
 
     if receive_annotation:
         if isinstance(receive_annotation, ExprSubscript) and receive_annotation.is_tuple:
-            receive_elements = receive_annotation.slice.elements  # type: ignore[union-attr]
+            receive_elements = receive_annotation.slice.elements
         else:
             receive_elements = [receive_annotation]
         receive_data = [
@@ -204,7 +204,7 @@ def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | No
         "typing.Generator",
         "typing_extensions.Generator",
     }:
-        return_annotation = annotation.slice.elements[2]  # type: ignore[union-attr]
+        return_annotation = annotation.slice.elements[2]  # ty:ignore[unresolved-attribute]
     elif isinstance(annotation, ExprSubscript) and annotation.canonical_path in {
         "typing.Annotated",
         "typing_extensions.Annotated",
@@ -213,7 +213,7 @@ def _returns_docs(func: Function, **kwargs: Any) -> DocstringSectionReturns | No
 
     if return_annotation:
         if isinstance(return_annotation, ExprSubscript) and return_annotation.is_tuple:
-            return_elements = return_annotation.slice.elements  # type: ignore[union-attr]
+            return_elements = return_annotation.slice.elements  # ty:ignore[unresolved-attribute]
         else:
             return_elements = [return_annotation]
         return_data = [
@@ -231,7 +231,7 @@ def _warns_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> DocstringS
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns  # type: ignore[union-attr]
+        annotation = attr_or_func.returns  # ty:ignore[unresolved-attribute]
     else:
         return None
     metadata = _metadata(annotation)
@@ -244,7 +244,7 @@ def _raises_docs(attr_or_func: Attribute | Function, **kwargs: Any) -> Docstring
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns  # type: ignore[union-attr]
+        annotation = attr_or_func.returns  # ty:ignore[unresolved-attribute]
     else:
         return None
     metadata = _metadata(annotation)
@@ -260,7 +260,7 @@ def _deprecated_docs(
     if attr_or_func.is_attribute:
         annotation = attr_or_func.annotation
     elif attr_or_func.is_function:
-        annotation = attr_or_func.returns  # type: ignore[union-attr]
+        annotation = attr_or_func.returns  # ty:ignore[unresolved-attribute]
     else:
         return None
     metadata = _metadata(annotation)

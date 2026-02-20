@@ -29,11 +29,12 @@ class TypingDocExtension(Extension):
 
         module = dynamic if node else static
 
+        kwargs = {"node": node} if node else {}
         new_sections = (
-            docstring := module._attribute_docs(attr, node=node),
-            deprecated_section := module._deprecated_docs(attr, node=node),
-            raises_section := module._raises_docs(attr, node=node),
-            warns_section := module._warns_docs(attr, node=node),
+            docstring := module._attribute_docs(attr, **kwargs),
+            deprecated_section := module._deprecated_docs(attr, **kwargs),
+            raises_section := module._raises_docs(attr, **kwargs),
+            warns_section := module._warns_docs(attr, **kwargs),
         )
 
         if not any(new_sections):
@@ -60,15 +61,16 @@ class TypingDocExtension(Extension):
 
         module = dynamic if node else static
 
+        kwargs = {"node": node} if node else {}
         new_sections = (
-            deprecated_section := module._deprecated_docs(func, node=node),
-            params_section := module._parameters_docs(func, node=node),
-            other_params_section := module._other_parameters_docs(func, node=node),
-            warns_section := module._warns_docs(func, node=node),
-            raises_section := module._raises_docs(func, node=node),
-            yields_section := module._yields_docs(func, node=node),
-            receives_section := module._receives_docs(func, node=node),
-            returns_section := module._returns_docs(func, node=node),
+            deprecated_section := module._deprecated_docs(func, **kwargs),
+            params_section := module._parameters_docs(func, **kwargs),
+            other_params_section := module._other_parameters_docs(func, **kwargs),
+            warns_section := module._warns_docs(func, **kwargs),
+            raises_section := module._raises_docs(func, **kwargs),
+            yields_section := module._yields_docs(func, **kwargs),
+            receives_section := module._receives_docs(func, **kwargs),
+            returns_section := module._returns_docs(func, **kwargs),
         )
 
         if not any(new_sections):
@@ -110,9 +112,9 @@ class TypingDocExtension(Extension):
             for member in obj.members.values():
                 self._handle_object(member)
         elif obj.is_function:
-            self._handle_function(obj)  # type: ignore[arg-type]
+            self._handle_function(obj)  # ty:ignore[invalid-argument-type]
         elif obj.is_attribute:
-            self._handle_attribute(obj)  # type: ignore[arg-type]
+            self._handle_attribute(obj)  # ty:ignore[invalid-argument-type]
 
     def on_package(
         self,

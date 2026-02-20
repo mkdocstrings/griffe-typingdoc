@@ -26,6 +26,7 @@ ignore = [
     "PLR0913",  # Too many arguments to function call
     "PLR0915",  # Too many statements
     "SLF001", # Private member accessed
+    "TD001",  # Invalid TODO tag "FIXME"
     "TD002",  # Missing author in TODO
     "TD003",  # Missing issue link for TODO
     "TRY003",  # Avoid specifying long messages outside the exception class
