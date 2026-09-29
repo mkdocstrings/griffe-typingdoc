@@ -18,8 +18,11 @@
 
 """Griffe TypingDoc package.
 
-Griffe extension for PEP 727 – Documentation Metadata in Typing.
+Griffe extension for PEP 727 - Documentation Metadata in Typing.
 """
 
 from __future__ import annotations
-__all__: list[str] = []
+
+from griffe_typingdoc._internal.extension import TypingDocExtension
+
+__all__: list[str] = ["TypingDocExtension"]
