@@ -7,21 +7,21 @@
         <loc>https://mkdocstrings.github.io/griffe-typingdoc/changelog/</loc>
       </url>
       <url>
-        <loc>https://mkdocstrings.github.io/griffe-typingdoc/credits/</loc>
-      </url>
-      <url>
-        <loc>https://mkdocstrings.github.io/griffe-typingdoc/license/</loc>
-      </url>
-      <url>
-        <loc>https://mkdocstrings.github.io/griffe-typingdoc/examples/</loc>
-      </url>
-      <url>
-        <loc>https://mkdocstrings.github.io/griffe-typingdoc/reference/api/</loc>
+        <loc>https://mkdocstrings.github.io/griffe-typingdoc/code_of_conduct/</loc>
       </url>
       <url>
         <loc>https://mkdocstrings.github.io/griffe-typingdoc/contributing/</loc>
       </url>
       <url>
-        <loc>https://mkdocstrings.github.io/griffe-typingdoc/code_of_conduct/</loc>
+        <loc>https://mkdocstrings.github.io/griffe-typingdoc/credits/</loc>
+      </url>
+      <url>
+        <loc>https://mkdocstrings.github.io/griffe-typingdoc/examples/</loc>
+      </url>
+      <url>
+        <loc>https://mkdocstrings.github.io/griffe-typingdoc/license/</loc>
+      </url>
+      <url>
+        <loc>https://mkdocstrings.github.io/griffe-typingdoc/reference/api/</loc>
       </url>
 </urlset>
